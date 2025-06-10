@@ -214,9 +214,9 @@ values (1, 'Phone Store', '091101', '12.1959769, -86.0959492 pQCT');
 GO
 
 
-insert into Sucursal(Id_Sucursal, Nombre_Sucursal, Direccion)
-values (1, 'PH-Central','12.1959769, -86.0959492 pQCT'),
-(2, 'PH-Siete Sur','12°07,25.4"N 86°18,39.4"W');
+insert into Sucursal(Nombre_Sucursal, Direccion)
+values ('PH-Central','12.1959769, -86.0959492 pQCT'),
+('PH-Siete Sur','12°07,25.4"N 86°18,39.4"W');
 go
 
 
