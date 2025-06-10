@@ -5,6 +5,7 @@ use Ph0n3_St0r3;
 GO
 
 
+	
 
 create table Rol(
 Role_Id int identity(1,1) primary key not null,
@@ -215,7 +216,7 @@ GO
 
 insert into Sucursal(Id_Sucursal, Nombre_Sucursal, Direccion)
 values (1, 'PH-Central','12.1959769, -86.0959492 pQCT'),
-(2, 'PH-Siete Sur','12°07,25.4"N 86°18,39.4"W');
+(2, 'PH-Siete Sur','12Â°07,25.4"N 86Â°18,39.4"W');
 go
 
 
@@ -653,7 +654,7 @@ BEGIN
     -- Validar si el nombre de usuario ya existe
     IF EXISTS (SELECT 1 FROM Cuenta_Web WHERE Usuario = @Usuario)
     BEGIN
-        SET @Mensaje = 'El nombre de usuario ya está en uso.';
+        SET @Mensaje = 'El nombre de usuario ya estÃ¡ en uso.';
         RETURN;
     END
 
@@ -987,7 +988,7 @@ BEGIN
         IF @EstadoVenta <> 1
         BEGIN
             SET @Resultado = 0;
-            SET @Mensaje = 'No se puede abonar a una venta que no esté en estado "Pendiente".';
+            SET @Mensaje = 'No se puede abonar a una venta que no estÃ© en estado "Pendiente".';
             RETURN;
         END
 
@@ -1010,7 +1011,7 @@ BEGIN
         INSERT INTO Abonos (Sale_Id, Abono_Amount, Abono_Date, Observaciones, Id_Empleado)
         VALUES (@Sale_Id, @Abono_Amount, GETDATE(), @Observaciones, @Id_User);
 
-        -- Si se completó el total, actualizar el estado de la venta a "Pagada" (2)
+        -- Si se completÃ³ el total, actualizar el estado de la venta a "Pagada" (2)
         IF @Abono_Amount = @Saldo_Pendiente
         BEGIN
             UPDATE Venta
@@ -1054,7 +1055,7 @@ VALUES
 ('RUC001', 'Proveedor Tech', 'contacto@proveedortech.com', '25123456', 'Av. Central 123, Ciudad', 1, GETDATE()),
 ('RUC002', 'Distribuciones Globales', 'ventas@distglobales.com', '71234567', 'Calle Principal 456, Ciudad', 1, GETDATE()),
 ('RUC003', 'Suministros Digitales', 'info@suministrosdigitales.com', '87123456', 'Plaza Comercial 789, Ciudad', 1, GETDATE()),
-('RUC004', 'ElectroMundo', 'contacto@electromundo.com', '58123456', 'Avenida Tecnológica 321, Ciudad', 1, GETDATE()),
+('RUC004', 'ElectroMundo', 'contacto@electromundo.com', '58123456', 'Avenida TecnolÃ³gica 321, Ciudad', 1, GETDATE()),
 ('RUC005', 'Innovaciones y Servicios', 'servicios@innovserv.com', '72123456', 'Boulevard Industrial 654, Ciudad', 1, GETDATE());;
 GO
 
@@ -1075,11 +1076,11 @@ BEGIN
         WHERE i.Quantity > p.Stock
     )
     BEGIN
-        RAISERROR('Stock insuficiente para uno o más productos.', 16, 1);
+        RAISERROR('Stock insuficiente para uno o mÃ¡s productos.', 16, 1);
         RETURN;
     END
 
-    -- Si pasa validación, entonces permitir el insert
+    -- Si pasa validaciÃ³n, entonces permitir el insert
     INSERT INTO Det_Venta(Sale_Id, Sucursal_Id, Prod_Id, Sale_Price, Quantity, SubTotal)
     SELECT Sale_Id, Sucursal_Id, Prod_Id, Sale_Price, Quantity, SubTotal FROM INSERTED;
 END;
@@ -1120,7 +1121,7 @@ AS
 BEGIN
     INSERT INTO HistorialAcciones (Empleado, Accion, Modulo)
     SELECT 1,  -- El ID del administrador
-           CONCAT('Registró un nuevo usuario: ', Employee_FullName),
+           CONCAT('RegistrÃ³ un nuevo usuario: ', Employee_FullName),
            'Usuario'
     FROM inserted;
 END;
@@ -1135,7 +1136,7 @@ AS
 BEGIN
     INSERT INTO HistorialAcciones (Empleado, Accion, Modulo)
     SELECT Id_Empleado, 
-           CONCAT('Registró una venta (ID ', Sale_Id, ')'),
+           CONCAT('RegistrÃ³ una venta (ID ', Sale_Id, ')'),
            'Venta'
     FROM inserted;
 END;
@@ -1149,7 +1150,7 @@ AS
 BEGIN
     INSERT INTO HistorialAcciones (Empleado, Accion, Modulo)
     SELECT Id_Empleado, 
-           CONCAT('Registró un abono de C$', Abono_Amount, ' a venta ID ', Sale_Id),
+           CONCAT('RegistrÃ³ un abono de C$', Abono_Amount, ' a venta ID ', Sale_Id),
            'Abono'
     FROM inserted;
 END;
@@ -1165,7 +1166,7 @@ BEGIN
     INSERT INTO HistorialAcciones (Empleado, Accion, Modulo)
     SELECT 
         Id_Empleado,
-        CONCAT('Registró una compra (ID ', Purchase_Id, ') con total de C$', Total),
+        CONCAT('RegistrÃ³ una compra (ID ', Purchase_Id, ') con total de C$', Total),
         'Compra'
     FROM inserted;
 END;
@@ -1181,11 +1182,11 @@ BEGIN
     INSERT INTO HistorialAcciones (Empleado, Accion, Modulo)
     SELECT 
         i.Id_Empleado,
-        CONCAT('Modificó la compra ID ', i.Purchase_Id, ' (total anterior: C$', d.Total, ', nuevo total: C$', i.Total, ')'),
+        CONCAT('ModificÃ³ la compra ID ', i.Purchase_Id, ' (total anterior: C$', d.Total, ', nuevo total: C$', i.Total, ')'),
         'Compra'
     FROM inserted i
     JOIN deleted d ON i.Purchase_Id = d.Purchase_Id
-    WHERE i.Total != d.Total; -- Solo si el total cambió
+    WHERE i.Total != d.Total; -- Solo si el total cambiÃ³
 END;
 GO
 
