@@ -867,6 +867,7 @@ GO
 CREATE PROCEDURE sp_RegistrarVenta(
     @Id_User INT,
     @Client_Id INT,
+    @Sucursal_Id INT,
     @Pay_Type INT, -- FK a Tipos_Pago
     @Sale_Status INT, -- FK a Estado_Pago
     @Pay_Amount numeric(18,2),
@@ -929,8 +930,8 @@ BEGIN
         SET @Sale_Id = SCOPE_IDENTITY();
 
         -- Registrar Detalles de Venta
-        INSERT INTO Det_Venta(Sale_Id, Prod_Id, Sale_Price, Quantity, SubTotal)
-        SELECT @Sale_Id, Prod_Id, Sale_Price, Quantity, SubTotal FROM @DetalleVenta;
+        INSERT INTO Det_Venta(Sale_Id, Prod_Id, Sale_Price, Quantity, SubTotal, Sucursal_Id)
+        SELECT @Sale_Id, Prod_Id, Sale_Price, Quantity, SubTotal, @Sucursal_Id FROM @DetalleVenta;
 
         COMMIT TRANSACTION registro;
     END TRY
