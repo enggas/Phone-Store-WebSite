@@ -44,7 +44,7 @@ go
 
 create table Cliente(
 Client_Id int identity(1,1) primary key not null,
-Cedula char(14) CHECK (Cedula LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][A-Z]') not null,
+Cedula char(16) CHECK (Cedula LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][A-Z]') not null,
 Client_FullName nvarchar(50) not null,
 Gmail nvarchar(60) not null,
 Telephone char(8) check(Telephone like '[2|5|7|8][0-9][0-9][0-9][0-9][0-9][0-9][0-9]') not null,
@@ -68,7 +68,7 @@ GO
 
 create table Empleado(
 Id_Empleado int identity(1,1) primary key not null,
-Cedula char(14) CHECK (Cedula LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][A-Z]') not null,
+Cedula char(16) CHECK (Cedula LIKE '[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][A-Z]') not null,
 Employee_FullName nvarchar(50) not null,
 Gmail nvarchar(60) not null,
 Pssword nvarchar(50) not null,
@@ -944,7 +944,7 @@ GO
 
 CREATE PROCEDURE sp_RegistrarAbono
     @Sale_Id INT,
-    @Abono_Amount DECIMAL(10,2),
+    @Abono_Amount DECIMAL(18,2),
     @Observaciones NVARCHAR(100) = NULL,
     @Id_User INT,
     @Resultado BIT OUTPUT,
