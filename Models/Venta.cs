@@ -11,12 +11,12 @@ namespace PhoneStore_Website.Models
 
         [Required(ErrorMessage = "La Id del Empleado es Requerida")]
         public required int Id_Empleado { get; set; }
-        public Empleado Empleado { get; set; }
+        public Empleado Empleado { get; set; } = null!;
 
 
         [Required(ErrorMessage = "La Id del Cliente es Requerida")]
         public required int Id_Cliente { get; set; }
-        public Cliente Clientes { get; set; }
+        public Cliente Clientes { get; set; } = null!;
 
 
         [Required(ErrorMessage = "El Tipo de Pago es Requerido")]
@@ -39,7 +39,7 @@ namespace PhoneStore_Website.Models
         public required decimal Total_Amount { get; set; }
 
 
-        public ICollection<Det_Venta> Det_Ventas { get; set; }
-        public ICollection<Abonos> Abonos { get; set; }
+        public ICollection<Det_Venta> Det_Ventas { get; set; } = new List<Det_Venta>();
+        public ICollection<Abonos> Abonos { get; set; } = new List<Abonos>();
     }
 }

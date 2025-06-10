@@ -11,7 +11,7 @@ namespace PhoneStore_Website.Models
 
         [Required(ErrorMessage = "La Id del Empleado es Requerida")]
         public required int Empleado { get; set; }
-        public Empleado Emp { get; set; }
+        public Empleado Emp { get; set; } = null!;
 
 
         [Required(ErrorMessage = "La Descripcion de la Accion es Requerida")]
@@ -25,5 +25,6 @@ namespace PhoneStore_Website.Models
         [Required(ErrorMessage = "El Modulo en el que se Realizo la Accion es Requerido")]
         public required String Modulo { get; set; }
 
+       
     }
 }

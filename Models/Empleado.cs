@@ -23,7 +23,7 @@ namespace PhoneStore_Website.Models
 
         [Required(ErrorMessage = "La Contraseña es Requerido")]
         public required String Password { get; set; }
-        public Sucursal Sucursal { get; set; }
+        
 
 
         [Required(ErrorMessage = "El Rol del Empleado es Requerido")]
@@ -32,14 +32,15 @@ namespace PhoneStore_Website.Models
 
         [Required(ErrorMessage = "La Sucursal del Empleado es Requerida")]
         public required int Sucursal_Id { get; set; }
+        public Sucursal Sucursal { get; set; } = null!;
 
 
         [Required(ErrorMessage = "El Estado del Empleado es Requerido")]
         public required bool User_State { get; set; }
 
-        public ICollection<Venta> Ventas { get; set; }
-        public ICollection<Abonos> Abonos { get; set; }
-        public ICollection<Historial_Actividades> Historial { get; set; }
+        public ICollection<Venta> Ventas { get; set; } = new List<Venta>();
+        public ICollection<Abonos> Abonos { get; set; } = new List<Abonos>();
+        public ICollection<Historial_Actividades> Historial { get; set; } = new List<Historial_Actividades>();
 
 
 

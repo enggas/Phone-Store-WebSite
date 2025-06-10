@@ -11,17 +11,17 @@ namespace PhoneStore_Website.Models
 
         [Required(ErrorMessage = "La Sucursal es Requerida")]
         public required int Sucursal { get; set; }
-        public Sucursal sucursal { get; set; }
+        public Sucursal sucursal { get; set; } = null!;
 
 
         [Required(ErrorMessage = "La Id de la Venta es Requerida")]
         public required int Venta_Id { get; set; }
-        public Venta venta { get; set; }
+        public Venta venta { get; set; } = null!;
 
 
         [Required(ErrorMessage = "La Id del Producto es Requerida")]
         public required int Prod_Id { get; set; }
-        public Producto Producto { get; set; }
+        public Producto Producto { get; set; }= null!;
 
 
         [Required(ErrorMessage = "El Precio del Producto es Requerido")]

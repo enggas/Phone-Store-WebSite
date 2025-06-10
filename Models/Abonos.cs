@@ -11,7 +11,7 @@ namespace PhoneStore_Website.Models
 
         [Required(ErrorMessage = "La Id de la Venta es Requerida")]
         public required int Sale_Id { get; set; }
-        public Venta venta { get; set; }
+        public Venta venta { get; set; } = null!;
 
 
         [Required(ErrorMessage = "El Monto del Abono es Requerido")]
@@ -28,7 +28,7 @@ namespace PhoneStore_Website.Models
 
         [Required(ErrorMessage = "El Id del Empleado es Requerido")]
         public required int Id_Empleado { get; set; }
-        public Empleado empleado { get; set; }
+        public Empleado empleado { get; set; } = null!;
 
 
 

@@ -19,8 +19,8 @@ namespace PhoneStore_Website.Models
 
 
         // Relación de navegación (una categoría tiene muchos productos)
-        public ICollection<Empleado> Empleados { get; set; }
-        public ICollection<Det_Venta> Det_Ventas { get; set; }
+        public ICollection<Empleado> Empleados { get; set; } = new List<Empleado>();
+        public ICollection<Det_Venta> Det_Ventas { get; set; } = new List<Det_Venta>();
 
 
     }
