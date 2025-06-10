@@ -84,7 +84,7 @@ GO
 
 create table Marca(
 Id_Marca int identity(1,1) primary key not null,
-Marca_Description nvarchar(50) not null,
+Marca_Name nvarchar(50) not null,
 Marca_State bit default 1 not null,
 Creation_Date date default getdate()
 );
@@ -382,7 +382,7 @@ GO
 
 
 create procedure SP_RegistrarMarca(
-@Marca_Description nvarchar(500),
+@Marca_Name nvarchar(500),
 @Marca_State bit,
 @Resultado int output,
 @Mensaje nvarchar(500) output
@@ -392,7 +392,7 @@ begin
    set @Resultado=0
    if not exists(Select * from Marca where Marca_Description=@Marca_Description)
    begin
-     insert into Marca(Marca_Description, Marca_State) values (@Marca_Description, @Marca_State)
+     insert into Marca(Marca_Name, Marca_State) values (@Marca_Name, @Marca_State)
 	 set @Resultado=SCOPE_IDENTITY()
    end
    else
@@ -405,17 +405,17 @@ GO
 create procedure SP_EditarMarca(
 @Id_Marca int,
 @Marca_State bit,
-@Marca_Description nvarchar(50),
+@Marca_Name nvarchar(50),
 @Resultado bit output,
 @Mensaje nvarchar(500) output
 )
 as
 begin
   set @Resultado=1
-  if not exists (select * from Marca where @Marca_Description=Marca_Description and Id_Marca!=@Id_Marca)
+  if not exists (select * from Marca where @Marca_Name=Marca_Name and Id_Marca!=@Id_Marca)
 
      update Marca set
-     Marca_Description=@Marca_Description,
+     	 Marca_Name=@Marca_Name,
 	 Marca_State=@Marca_State
      where Id_Marca=@Id_Marca
   else
