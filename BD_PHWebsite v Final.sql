@@ -229,9 +229,9 @@ GO
  ---DBCC CHECKIDENT ('Marca', RESEED, 0);
 
 
-insert into Empleado(Cedula, Employee_FullName, Gmail, Pssword, Role_Id, User_State)
-values ('001-101010-1031D', 'ADMIN-nombre', 'CR7@gmail.com', '123', 1,1),
-('001-202020-1023D', 'Empleado-nombre', 'MESSI@gmail.com', '456', 2,1);
+insert into Empleado(Cedula, Employee_FullName, Gmail, Pssword, Role_Id,Sucursal_Id, User_State)
+values ('001-101010-1031D', 'ADMIN-nombre', 'CR7@gmail.com', '123', 1,1,1),
+('001-202020-1023D', 'Empleado-nombre', 'MESSI@gmail.com', '456', 2,2,1);
 GO
 
 
