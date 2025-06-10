@@ -185,14 +185,13 @@ Observaciones nvarchar(100),
 Id_Empleado int foreign key references Empleado(Id_Empleado) not null
 )
 
-
 CREATE TABLE HistorialAcciones (
 Historial_Id INT IDENTITY(1,1) PRIMARY KEY not null,
-Tabla NVARCHAR(50),
-Accion NVARCHAR(50),
 Empleado INT FOREIGN KEY REFERENCES Empleado(Id_Empleado),
+Accion NVARCHAR(50),
 Fecha DATETIME DEFAULT GETDATE(),
-Detalles NVARCHAR(500)
+Modulo NVARCHAR(50),
+Estado bit default 1
 );
 
 
@@ -214,7 +213,7 @@ GO
 
 insert into Sucursal(Id_Sucursal, Nombre_Sucursal, Direccion)
 values (1, 'PH-Central','12.1959769, -86.0959492 pQCT'),
-(2, 'PH-Siete Sur','12∞07,25.4"N 86∞18,39.4"W');
+(2, 'PH-Siete Sur','12¬∞07,25.4"N 86¬∞18,39.4"W');
 go
 
 
@@ -652,7 +651,7 @@ BEGIN
     -- Validar si el nombre de usuario ya existe
     IF EXISTS (SELECT 1 FROM Cuenta_Web WHERE Usuario = @Usuario)
     BEGIN
-        SET @Mensaje = 'El nombre de usuario ya est· en uso.';
+        SET @Mensaje = 'El nombre de usuario ya est√° en uso.';
         RETURN;
     END
 
@@ -987,7 +986,7 @@ BEGIN
         IF @EstadoVenta <> 1
         BEGIN
             SET @Resultado = 0;
-            SET @Mensaje = 'No se puede abonar a una venta que no estÈ en estado "Pendiente".';
+            SET @Mensaje = 'No se puede abonar a una venta que no est√© en estado "Pendiente".';
             RETURN;
         END
 
@@ -1010,7 +1009,7 @@ BEGIN
         INSERT INTO Abonos (Sale_Id, Abono_Amount, Abono_Date, Observaciones, Id_Empleado)
         VALUES (@Sale_Id, @Abono_Amount, GETDATE(), @Observaciones, @Id_User);
 
-        -- Si se completÛ el total, actualizar el estado de la venta a "Pagada" (2)
+        -- Si se complet√≥ el total, actualizar el estado de la venta a "Pagada" (2)
         IF @Abono_Amount = @Saldo_Pendiente
         BEGIN
             UPDATE Venta
@@ -1054,7 +1053,7 @@ VALUES
 ('RUC001', 'Proveedor Tech', 'contacto@proveedortech.com', '25123456', 'Av. Central 123, Ciudad', 1, GETDATE()),
 ('RUC002', 'Distribuciones Globales', 'ventas@distglobales.com', '71234567', 'Calle Principal 456, Ciudad', 1, GETDATE()),
 ('RUC003', 'Suministros Digitales', 'info@suministrosdigitales.com', '87123456', 'Plaza Comercial 789, Ciudad', 1, GETDATE()),
-('RUC004', 'ElectroMundo', 'contacto@electromundo.com', '58123456', 'Avenida TecnolÛgica 321, Ciudad', 1, GETDATE()),
+('RUC004', 'ElectroMundo', 'contacto@electromundo.com', '58123456', 'Avenida Tecnol√≥gica 321, Ciudad', 1, GETDATE()),
 ('RUC005', 'Innovaciones y Servicios', 'servicios@innovserv.com', '72123456', 'Boulevard Industrial 654, Ciudad', 1, GETDATE());;
 GO
 
@@ -1075,11 +1074,11 @@ BEGIN
         WHERE i.Quantity > p.Stock
     )
     BEGIN
-        RAISERROR('Stock insuficiente para uno o m·s productos.', 16, 1);
+        RAISERROR('Stock insuficiente para uno o m√°s productos.', 16, 1);
         RETURN;
     END
 
-    -- Si pasa validaciÛn, entonces permitir el insert
+    -- Si pasa validaci√≥n, entonces permitir el insert
     INSERT INTO Det_Venta(Sale_Id, Sucursal_Id, Prod_Id, Sale_Price, Quantity, SubTotal)
     SELECT Sale_Id, Sucursal_Id, Prod_Id, Sale_Price, Quantity, SubTotal FROM INSERTED;
 END;
@@ -1112,20 +1111,83 @@ END;
 GO
 
 
---Trigger para auditar insercion de la tabla usuario
+--Trigger para auditar insercion de la tabla empleados
 
-CREATE TRIGGER trg_AuditarUsuarioInsert
-ON Empleado
+CREATE TRIGGER trg_Historial_InsertUsuario ON Empleado
 AFTER INSERT
 AS
 BEGIN
-    INSERT INTO HistorialAcciones(Tabla, Accion, Empleado, Detalles)
-    SELECT
-        'Usuario',
-        'Insert',
-        Id_Empleado,
-        CONCAT('Nuevo usuario registrado: ', Employee_FullName, ' (', Gmail, ')')
-    FROM INSERTED;
+    INSERT INTO HistorialAcciones (Empleado, Accion, Modulo)
+    SELECT 1,  -- El ID del administrador
+           CONCAT('Registr√≥ un nuevo usuario: ', Employee_FullName),
+           'Usuario'
+    FROM inserted;
 END;
 GO
+
+--Trigger para auditar ventas realizadas por los empleados
+
+CREATE TRIGGER trg_Historial_InsertVenta ON Venta
+AFTER INSERT
+AS
+BEGIN
+    INSERT INTO HistorialAcciones (Empleado, Accion, Modulo)
+    SELECT Id_Empleado, 
+           CONCAT('Registr√≥ una venta (ID ', Sale_Id, ')'),
+           'Venta'
+    FROM inserted;
+END;
+GO
+
+--Trigger para auditar insercion de abonos por los empleados 
+
+CREATE TRIGGER trg_Historial_InsertAbono ON Abonos
+AFTER INSERT
+AS
+BEGIN
+    INSERT INTO HistorialAcciones (Empleado, Accion, Modulo)
+    SELECT Id_Empleado, 
+           CONCAT('Registr√≥ un abono de C$', Abono_Amount, ' a venta ID ', Sale_Id),
+           'Abono'
+    FROM inserted;
+END;
+GO
+
+--Trigger para auditar insercion de compras realizadas por empleados
+
+CREATE TRIGGER trg_Historial_InsertCompra ON Compra
+AFTER INSERT
+AS
+BEGIN
+    INSERT INTO HistorialAcciones (Empleado, Accion, Modulo)
+    SELECT 
+        Id_Empleado,
+        CONCAT('Registr√≥ una compra (ID ', Purchase_Id, ') con total de C$', Total),
+        'Compra'
+    FROM inserted;
+END;
+GO
+
+--Trigger para auditar edicion de compras realizadas por empleados
+
+CREATE TRIGGER trg_Historial_UpdateCompra ON Compra
+AFTER UPDATE
+AS
+BEGIN
+    INSERT INTO HistorialAcciones (Empleado, Accion, Modulo)
+    SELECT 
+        i.Id_Empleado,
+        CONCAT('Modific√≥ la compra ID ', i.Purchase_Id, ' (total anterior: C$', d.Total, ', nuevo total: C$', i.Total, ')'),
+        'Compra'
+    FROM inserted i
+    JOIN deleted d ON i.Purchase_Id = d.Purchase_Id
+    WHERE i.Total != d.Total; -- Solo si el total cambi√≥
+END;
+GO
+
+
+
+
+
+
 
