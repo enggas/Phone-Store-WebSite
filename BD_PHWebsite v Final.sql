@@ -254,7 +254,7 @@ GO
 
 --select * from Rol
 --select * from Permiso
---select * from Usuario
+--select * from Empleado
 
 
 
