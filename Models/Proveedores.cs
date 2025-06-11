@@ -33,6 +33,6 @@ namespace PhoneStore_Website.Models
         public required bool Prov_State { get; set; }
 
 
-
+        public ICollection<Compra> Compras { get; set; } = new List<Compra>();
     }
 }
