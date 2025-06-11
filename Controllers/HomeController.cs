@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PhoneStore_Website.Data;
 using PhoneStore_Website.Models;
 
@@ -14,7 +15,14 @@ namespace PhoneStore_Website.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.Producto.ToListAsync());
+        }
+
+        [HttpGet]
+        public IActionResult Login()
         {
             return View();
         }

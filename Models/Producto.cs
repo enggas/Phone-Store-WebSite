@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Timers;
 
 namespace PhoneStore_Website.Models
@@ -20,16 +21,16 @@ namespace PhoneStore_Website.Models
 
 
         [Required(ErrorMessage = "La Descripcion del Producto es Requerida")]
-        public required String Prod_Descripcion { get; set; }
+        public required String Prod_Description { get; set; }
 
 
-        [Required(ErrorMessage = "La Marca del Producto es Requerida")]
+        [ForeignKey("Id_Marca")]
         public required int Id_Marca { get; set; }
         public Marca Marca { get; set; } = null!;
 
 
         [Required(ErrorMessage = "El Stock Disponible del Producto es Requerido")]
-        public required int Prod_Stock { get; set; }
+        public required int Stock { get; set; }
 
 
         [Required(ErrorMessage = "El Precio de Compra del Producto es Requerido")]
@@ -41,10 +42,9 @@ namespace PhoneStore_Website.Models
 
 
         [Required(ErrorMessage = "El Estado del Producto es Requerido")]
-        public required bool Prod_Estado { get; set; }
+        public required bool Prod_State { get; set; }
 
-        [Required(ErrorMessage = "La Imagen del Producto es Requerida")]
-        public required String Prod_Imagen { get; set; }
+        public String Imagen { get; set; }
 
 
 

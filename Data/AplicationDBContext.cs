@@ -15,14 +15,13 @@ namespace PhoneStore_Website.Data
 
         }
         //Aqui Se Agregan todos los modelos(las tablas de las base de datos)
-
         public DbSet<Proveedores> Proveedores { get; set; }
-        public DbSet<Sucursal> sucursales { get; set; }
-        public DbSet<Cliente> clientes { get; set; }
-        public DbSet<Cuenta_Web> cuenta_Webs { get; set; }
-        public DbSet<Empleado> Empleados { get; set; }
-        public DbSet<Marca> Marcas { get; set; }
-        public DbSet<Producto> Productos { get; set; }
+        public DbSet<Sucursal> Sucursales { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Cuenta_Web> Cuenta_Web { get; set; }
+        public DbSet<Empleado> Empleado { get; set; }
+        public DbSet<Marca> Marca { get; set; }
+        public DbSet<Producto> Producto { get; set; }
         public DbSet<Compra> Compras { get; set; }
         public DbSet<Det_Compra> Det_Compras { get; set; }
         public DbSet<Tipos_Pago> Tipos_Pagos { get; set; }
@@ -32,6 +31,17 @@ namespace PhoneStore_Website.Data
         public DbSet<Abonos> Abonos { get; set; }
         public DbSet<Historial_Actividades> Historial_Actividades { get; set; }
 
+
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Producto>()
+                .HasOne(p => p.Marca)
+                .WithMany(m => m.Productos)
+                .HasForeignKey(p => p.Id_Marca);
+            base.OnModelCreating(modelBuilder);
+        }
 
 
 
