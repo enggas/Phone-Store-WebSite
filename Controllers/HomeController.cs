@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PhoneStore_Website.Data;
@@ -25,6 +26,16 @@ namespace PhoneStore_Website.Controllers
         public IActionResult Login()
         {
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Lista_Producto()
+        { 
+            var productosconmarca = await _context.Producto
+                .Include(p => p.Marca)
+                .ToListAsync();
+
+            return View(productosconmarca);
         }
 
         public IActionResult Privacy()

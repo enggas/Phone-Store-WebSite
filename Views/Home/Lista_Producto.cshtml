@@ -1,0 +1,88 @@
+﻿@model IEnumerable<PhoneStore_Website.Models.Producto>
+@{
+    ViewData["Title"] = "Lista_Producto";
+}
+
+
+<style>
+    .search-bar {
+        background-color: #005f6b;
+        padding: 1rem;
+        margin: 2rem auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+        color: white;
+    }
+
+    .search-bar input {
+        width: 50%;
+        padding: 0.5rem;
+        border-radius: 10px;
+        border: none;
+    }
+
+    .card-custom {
+        background-color: #005f6b;
+        color: white;
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .card-price {
+        background-color: #5ee0e0;
+        color: black;
+        margin-top: 0.5rem;
+        padding: 0.3rem;
+        border-radius: 20px;
+    }
+
+    .card-label {
+        font-weight: bold;
+    }
+</style>
+
+<h2 class="text-center mt-4">Listado de Productos</h2>
+
+<!-- Barra de búsqueda -->
+<div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Buscar por nombre o código..." />
+</div>
+
+<div class="container">
+    <div class="row" id="productList">
+        @foreach (var producto in Model)
+        {
+            <div class="col-md-4 mb-4 product-card" data-name="@producto.Prod_Name.ToLower() @producto.Prod_Cod.ToLower()">
+                <div class="card-custom">
+                    <img src="~/images/@producto.Imagen" alt="@producto.Prod_Name" style="height: 200px; object-fit: contain; width: 100%;" />
+
+                    <p><span class="card-label">Código:</span> @producto.Prod_Cod</p>
+                    <p><span class="card-label">Nombre:</span> @producto.Prod_Name</p>
+                    <p><span class="card-label">Descripción:</span> @producto.Prod_Description</p>
+                    <p><span class="card-label">Marca:</span> @producto.Marca.Marca_Name</p>
+                    <p><span class="card-label">Stock:</span> @producto.Stock unidades</p>
+                    <div class="card-price">
+                        Precio de Venta: C$ @producto.Sale_Price
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const input = document.getElementById("searchInput");
+        input.addEventListener("input", function () {
+            const filter = input.value.toLowerCase();
+            document.querySelectorAll(".product-card").forEach(card => {
+                const name = card.getAttribute("data-name");
+                card.style.display = name.includes(filter) ? "block" : "none";
+            });
+        });
+    </script>
+
+}
