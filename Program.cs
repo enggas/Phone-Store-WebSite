@@ -1,4 +1,13 @@
+using PhoneStore_Website.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+//Configuracion de la conexion a la base de datos
+builder.Services.AddDbContext<PhoneStore_Website.Data.AplicationDBContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ConexionSQL")));
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
