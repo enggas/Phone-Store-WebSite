@@ -1,46 +1,159 @@
 ﻿@model IEnumerable<PhoneStore_Website.Models.Producto>
-
 @{
-    ViewData["Inicio"] = "Inicio";
+    ViewData["Title"] = "Inicio";
 }
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="@Url.Action("Index", "Home")">Mi Catálogo</a>
+<style>
+    .hero {
+        display: flex;
+        background-color: #ddd;
+        padding: 2rem;
+    }
 
+    .hero-left {
+        flex: 1;
+        padding-right: 1rem;
+    }
+
+    .hero-right {
+        flex: 1;
+        background-color: #333;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .hero-right img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+            .hero-right img.active {
+                opacity: 1;
+            }
+
+    .search-bar {
+        background-color: #005f6b;
+        padding: 1rem;
+        margin: 2rem auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+        color: white;
+    }
+
+        .search-bar input {
+            width: 50%;
+            padding: 0.5rem;
+            border-radius: 10px;
+            border: none;
+        }
+
+    .card-custom {
+        background-color: #005f6b;
+        color: white;
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .card-price {
+        background-color: #5ee0e0;
+        color: black;
+        margin-top: 0.5rem;
+        padding: 0.3rem;
+        border-radius: 20px;
+    }
+</style>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #005f6b;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="~/images/logo-placeholder.png" alt="Logo del Negocio" style="height: 40px;" />
+            Phone Store
+        </a>
         <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="btn btn-warning" asp-action="Login" asp-controller="Home">Login</a>
-                </li>
+                <li class="nav-item"><a class="btn" asp-action="Login" asp-controller="Home">Login</a></li>
+                <li class="nav-item"><a class ="nav-link" href="#">Contacto</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
-<h2 class="text-center">Catálogo de Productos</h2>
+<!-- HERO SECTION -->
+<div class="hero">
+    <div class="hero-left">
+        <h2>Somos Phone Store</h2>
+        <p>Poseemos a los mejores pintas de Ciudad Sandino para que te consigan el celular de tu preferencia</p>
+        <button class="btn btn-dark">Boton 1</button>
+    </div>
+    <div class="hero-right">
+        @* Imágenes de productos *@
+        @foreach (var p in Model.Take(2)) // Puedes limitar cuántas mostrar
+        {
+            <img src="~/images/@p.Imagen" alt="@p.Prod_Name" class="carousel-img" />
+        }
+        <button class="btn btn-light" style="position: absolute; bottom: 1rem; right: 1rem;">Lista de Productos</button>
+    </div>
+</div>
 
-<div class="row">
-    @if (Model != null && Model.Any())
-    {
+<!-- SEARCH BAR -->
+<div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Buscar productos..." />
+</div>
+
+<!-- PRODUCTOS -->
+<div class="container">
+    <div class="row" id="productList">
         @foreach (var producto in Model)
         {
-            <div class="col-md-3 mb-4">
-                <div class="card shadow-sm text-center">
-                    <img src="~/images/@producto.Imagen" alt="@producto.Prod_Name" class="card-img-top" style="height: 200px; object-fit: contain;" />
-                    <div class="card-body">
-                        <h5 class="card-title">@producto.Prod_Name</h5>
-                        <p class="card-text">@producto.Prod_Description</p>
-                        <p class="card-text">C$ @producto.Sale_Price</p>
-                    </div>
+            <div class="col-md-4 mb-4 product-card" data-name="@producto.Prod_Name.ToLower()">
+                <div class="card-custom">
+                    <img src="~/images/@producto.Imagen" alt="@producto.Prod_Name" style="height: 200px; object-fit: contain; width: 100%;" />
+                    <h5>@producto.Prod_Name</h5>
+                    <div class="card-price">C$ @producto.Sale_Price</div>
                 </div>
+              <button class="btn btn-secondary" style="width: 75%; object-fit:contain; justify-content=center;">Agregar al Carrito</button>
             </div>
         }
-
-    }
-    else
-    {
-        <p>No Hay Productos Disponibles</p>
-    }
-
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        // === CARRUSEL DE IMÁGENES ===
+        const imgs = document.querySelectorAll(".carousel-img");
+        let index = 0;
+
+        function rotateImages() {
+            imgs.forEach((img, i) => img.classList.remove("active"));
+            imgs[index].classList.add("active");
+            index = (index + 1) % imgs.length;
+        }
+
+        if (imgs.length > 0) {
+            imgs[0].classList.add("active");
+            setInterval(rotateImages, 4000); // Cada 4 segundos
+        }
+
+        // === BARRA DE BÚSQUEDA ===
+        const input = document.getElementById("searchInput");
+        input.addEventListener("input", function () {
+            const filter = input.value.toLowerCase();
+            document.querySelectorAll(".product-card").forEach(card => {
+                const name = card.getAttribute("data-name");
+                card.style.display = name.includes(filter) ? "block" : "none";
+            });
+        });
+    </script>
+}
+
