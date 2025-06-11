@@ -374,7 +374,7 @@ GO
 
 -- Desde aqui los procedimientos relacionados a Marca ------
 
-insert into Marca(Marca_Description, Marca_State) values('Samsung', 1)
+insert into Marca(Marca_Name, Marca_State) values('Samsung', 1)
 ,('Xiaomi', 1)
 ,('OnePLus', 1);
 GO
@@ -390,7 +390,7 @@ create procedure SP_RegistrarMarca(
 as
 begin
    set @Resultado=0
-   if not exists(Select * from Marca where Marca_Description=@Marca_Description)
+   if not exists(Select * from Marca where Marca_Name=@Marca_Name)
    begin
      insert into Marca(Marca_Name, Marca_State) values (@Marca_Name, @Marca_State)
 	 set @Resultado=SCOPE_IDENTITY()
