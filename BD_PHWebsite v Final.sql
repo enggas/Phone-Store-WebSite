@@ -1192,3 +1192,32 @@ END;
 GO
 
 
+update Producto set
+	Imagen='Productos\Samsung Galaxy S24 Ultra.png'
+where Prod_Id=1
+go
+
+update Producto set
+	Imagen='Productos\Samsung Galaxy S23.png'
+where Prod_Id=2
+go
+	
+update Producto set
+	Imagen='Productos\Samsung Galaxy A54.png'
+where Prod_Id=3
+go
+	
+update Producto set
+	Imagen='Productos\Xiaomi 13 PRO.png'
+where Prod_Id=4
+go
+	
+update Producto set
+	Imagen='Productos\Redmi Note 12.png'
+where Prod_Id=5
+go
+	
+update Producto set
+	Imagen='Productos\oneplus-11.png'
+where Prod_Id=6
+go
