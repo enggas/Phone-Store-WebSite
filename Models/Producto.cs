@@ -36,12 +36,16 @@ namespace PhoneStore_Website.Models
         public required decimal Purchase_Price { get; set; }
 
 
-        [Required(ErrorMessage = "El Precion de Compra del Producto es Requerido")]
+        [Required(ErrorMessage = "El Precio de Compra del Producto es Requerido")]
         public required decimal Sale_Price { get; set; }
 
 
         [Required(ErrorMessage = "El Estado del Producto es Requerido")]
         public required bool Prod_Estado { get; set; }
+
+        [Required(ErrorMessage = "La Imagen del Producto es Requerida")]
+        public required String Prod_Imagen { get; set; }
+
 
 
 
