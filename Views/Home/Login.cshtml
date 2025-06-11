@@ -1,0 +1,32 @@
+﻿@model PhoneStore_Website.Models.Cuenta_Web
+
+@{
+    ViewBag.Title = "Iniciar Sesión";
+}
+
+<h2>Iniciar Sesión</h2>
+
+@using (Html.BeginForm("Login", "Login", FormMethod.Post))
+{
+    <div>
+        @Html.LabelFor(m => m.Usuario)
+        @Html.TextBoxFor(m => m.Usuario, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Usuario)
+    </div>
+
+    <div>
+        @Html.LabelFor(m => m.Password)
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Password)
+    </div>
+
+    <button type="submit">Iniciar Sesión</button>
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.Error as string))
+{
+    <div style="color:red;">
+        @ViewBag.Error
+    </div>
+}
+

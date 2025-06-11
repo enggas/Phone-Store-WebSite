@@ -1,16 +1,17 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using PhoneStore_Website.Data;
 using PhoneStore_Website.Models;
 
 namespace PhoneStore_Website.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly AplicationDBContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(AplicationDBContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
