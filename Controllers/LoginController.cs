@@ -46,6 +46,10 @@ namespace PhoneStore_Website.Controllers
                 return View(cuenta);
             }
         }
+        public ActionResult CrearCuenta()
+        {
+            return View();
+        }
 
         public IActionResult Logout()
         {

@@ -1,0 +1,138 @@
+﻿@model PhoneStore_Website.Models.Cuenta_Web
+
+@{
+    ViewBag.Title = "Iniciar Sesión";
+    Layout = null; // Para que no cargue el layout principal
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Login - Phone Store</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #08515E;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background-color: #FFFFFF;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            color: #08515E;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #2E2E2E;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        .btn-login {
+            background-color: #08515E;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            width: 100%;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn-login:hover {
+            background-color: #063b45;
+        }
+
+        .forgot-password {
+            display: block;
+            margin-top: 25px;
+            color: #5CE1E6;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+
+        .text-danger {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Iniciar Sesión</h2>
+
+        @using (Html.BeginForm("Login", "Login", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Gmail, "Correo")
+                @Html.TextBoxFor(m => m.Gmail, new { @class = "form-control", placeholder = "Ingrese su correo electrónico" })
+                @Html.ValidationMessageFor(m => m.Gmail, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Password, "Contraseña")
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Ingrese su contraseña" })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+            </div>
+
+            <button type="submit" class="btn-login">Iniciar Sesión</button>
+        }
+
+        <a href="#" class="forgot-password">¿Has olvidado tu contraseña?</a>
+        <a href="@Url.Action("CrearCuenta", "Cuenta")" class="forgot-password">¿No tienes cuenta? Crear una nueva</a>
+
+
+
+        @if (!string.IsNullOrEmpty(ViewBag.Error as string))
+        {
+            <div class="error-message">@ViewBag.Error</div>
+        }
+    </div>
+
+    <!-- Scripts de validación obligatorios -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

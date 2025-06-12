@@ -1,15 +1,15 @@
 ﻿@model PhoneStore_Website.Models.Cuenta_Web
 
 @{
-    ViewBag.Title = "Iniciar Sesión";
-    Layout = null; // Para que no cargue el layout principal
+    ViewBag.Title = "Crear Cuenta";
+    Layout = null;
 }
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Login - Phone Store</title>
+    <title>Crear Cuenta - Phone Store</title>
     <style>
         body {
             margin: 0;
@@ -32,7 +32,7 @@
             text-align: center;
         }
 
-        .login-container h2 {
+        h2 {
             color: #08515E;
             margin-bottom: 30px;
         }
@@ -48,15 +48,14 @@
             color: #2E2E2E;
         }
 
-        input[type="text"],
-        input[type="password"] {
+        input {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 6px;
         }
 
-        .btn-login {
+        .btn-submit {
             background-color: #08515E;
             color: white;
             border: none;
@@ -68,69 +67,90 @@
             font-size: 16px;
         }
 
-        .btn-login:hover {
+        .btn-submit:hover {
             background-color: #063b45;
-        }
-
-        .forgot-password {
-            display: block;
-            margin-top: 25px;
-            color: #5CE1E6;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .forgot-password:hover {
-            text-decoration: underline;
-        }
-
-        .error-message {
-            color: red;
-            margin-top: 10px;
         }
 
         .text-danger {
             color: red;
             font-size: 14px;
         }
+
+        .back-login {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-login a {
+            color: #5CE1E6;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-login a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <h2>Login</h2>
+        <h2>Crear Cuenta</h2>
 
-        @using (Html.BeginForm("Login", "Login", FormMethod.Post))
+        @using (Html.BeginForm("CrearCuenta", "Cuenta", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
             <div class="form-group">
-                @Html.LabelFor(m => m.Gmail, "Correo")
-                @Html.TextBoxFor(m => m.Gmail, new { @class = "form-control", placeholder = "Ingrese su correo electrónico" })
+                @Html.LabelFor(m => m.Usuario, "Nombre de Usuario")
+                @Html.TextBoxFor(m => m.Usuario, new { @class = "form-control", placeholder = "Ingrese nombre de usuario" })
+                @Html.ValidationMessageFor(m => m.Usuario, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Gmail, "Correo Electrónico")
+                @Html.TextBoxFor(m => m.Gmail, new { @class = "form-control", type = "email", placeholder = "Ingrese su correo electrónico" })
                 @Html.ValidationMessageFor(m => m.Gmail, "", new { @class = "text-danger" })
             </div>
 
             <div class="form-group">
                 @Html.LabelFor(m => m.Password, "Contraseña")
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Ingrese su contraseña" })
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Ingrese una contraseña", id = "Password" })
                 @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
             </div>
 
-            <button type="submit" class="btn-login">Iniciar Sesión</button>
+            <div class="form-group">
+                <label for="ConfirmPassword">Confirmar Contraseña</label>
+                <input type="password" id="ConfirmPassword" name="ConfirmPassword" class="form-control" placeholder="Confirme la contraseña" />
+                <span id="confirm-error" class="text-danger" style="display:none;">Las contraseñas no coinciden.</span>
+            </div>
+
+            <button type="submit" class="btn-submit" id="btn-submit">Crear Cuenta</button>
         }
 
-        <a href="#" class="forgot-password">¿Has olvidado tu contraseña?</a>
-        <a href="#" class="forgot-password">¿No tienes cuenta? Crear una nueva</a>
-
-        @if (!string.IsNullOrEmpty(ViewBag.Error as string))
-        {
-            <div class="error-message">@ViewBag.Error</div>
-        }
+        <div class="back-login">
+            <a href="@Url.Action("Login", "Login")">¿Ya tienes cuenta? Inicia sesión</a>
+        </div>
     </div>
 
-    <!-- Scripts de validación obligatorios -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#btn-submit').click(function (e) {
+                const pass = $('#Password').val();
+                const confirm = $('#ConfirmPassword').val();
+
+                if (pass !== confirm) {
+                    $('#confirm-error').show();
+                    e.preventDefault();
+                } else {
+                    $('#confirm-error').hide();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
