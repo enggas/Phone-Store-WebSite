@@ -20,6 +20,8 @@ namespace PhoneStore_Website.Models
 
         public required String Pssword { get; set; }
 
+        public required String Confirmacion { get; set; }
+
 
         [Required(ErrorMessage = "El Numero de Celular del Cliente es Requerido")]
         public required String Telephone { get; set; }
