@@ -1,0 +1,156 @@
+﻿@model PhoneStore_Website.Models.Cliente
+
+@{
+    ViewBag.Title = "Crear Cuenta";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Crear Cuenta - Phone Store</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #08515E;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background-color: #FFFFFF;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #08515E;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #2E2E2E;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        .btn-submit {
+            background-color: #08515E;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            width: 100%;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn-submit:hover {
+            background-color: #063b45;
+        }
+
+        .text-danger {
+            color: red;
+            font-size: 14px;
+        }
+
+        .back-login {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-login a {
+            color: #5CE1E6;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-login a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Crear Cuenta</h2>
+
+        @using (Html.BeginForm("CrearCuenta", "Cuenta", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Client_Fullname, "Nombre de Usuario")
+                @Html.TextBoxFor(m => m.Client_Fullname, new { @class = "form-control", placeholder = "Ingrese nombre de usuario" })
+                @Html.ValidationMessageFor(m => m.Client_Fullname, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Gmail, "Correo Electrónico")
+                @Html.TextBoxFor(m => m.Gmail, new { @class = "form-control", type = "email", placeholder = "Ingrese su correo electrónico" })
+                @Html.ValidationMessageFor(m => m.Gmail, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Pssword, "Contraseña")
+                @Html.PasswordFor(m => m.Pssword, new { @class = "form-control", placeholder = "Ingrese una contraseña", id = "Password" })
+                @Html.ValidationMessageFor(m => m.Pssword, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label for="ConfirmPassword">Confirmar Contraseña</label>
+                <input type="password" id="ConfirmPassword" name="ConfirmPassword" class="form-control" placeholder="Confirme la contraseña" />
+                <span id="confirm-error" class="text-danger" style="display:none;">Las contraseñas no coinciden.</span>
+            </div>
+
+            <button type="submit" class="btn-submit" id="btn-submit">Crear Cuenta</button>
+        }
+
+        <div class="back-login">
+            <a href="@Url.Action("Login", "Login")">¿Ya tienes cuenta? Inicia sesión</a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#btn-submit').click(function (e) {
+                const pass = $('#Password').val();
+                const confirm = $('#ConfirmPassword').val();
+
+                if (pass !== confirm) {
+                    $('#confirm-error').show();
+                    e.preventDefault();
+                } else {
+                    $('#confirm-error').hide();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

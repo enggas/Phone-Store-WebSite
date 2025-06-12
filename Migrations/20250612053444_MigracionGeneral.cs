@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PhoneStore_Website.Migrations
 {
     /// <inheritdoc />
-    public partial class Migracion1 : Migration
+    public partial class MigracionGeneral : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,17 +15,17 @@ namespace PhoneStore_Website.Migrations
                 name: "Clientes",
                 columns: table => new
                 {
-                    Cliente_Id = table.Column<int>(type: "int", nullable: false)
+                    Client_Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Cedula = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Client_Fullname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Telephone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cliente_Estado = table.Column<bool>(type: "bit", nullable: false)
+                    Pssword = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Telephone = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Clientes", x => x.Cliente_Id);
+                    table.PrimaryKey("PK_Clientes", x => x.Client_Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -101,30 +101,6 @@ namespace PhoneStore_Website.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cuenta_Web",
-                columns: table => new
-                {
-                    Cuenta_Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Client_Id = table.Column<int>(type: "int", nullable: false),
-                    Cliente_Id = table.Column<int>(type: "int", nullable: false),
-                    Usuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Estado_Cuenta = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cuenta_Web", x => x.Cuenta_Id);
-                    table.ForeignKey(
-                        name: "FK_Cuenta_Web_Clientes_Cliente_Id",
-                        column: x => x.Cliente_Id,
-                        principalTable: "Clientes",
-                        principalColumn: "Cliente_Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Producto",
                 columns: table => new
                 {
@@ -132,21 +108,20 @@ namespace PhoneStore_Website.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Prod_Cod = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Prod_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Prod_Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Prod_Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Id_Marca = table.Column<int>(type: "int", nullable: false),
-                    MarcaId_Marca = table.Column<int>(type: "int", nullable: false),
-                    Prod_Stock = table.Column<int>(type: "int", nullable: false),
+                    Stock = table.Column<int>(type: "int", nullable: false),
                     Purchase_Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Sale_Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Prod_Estado = table.Column<bool>(type: "bit", nullable: false),
-                    Prod_Imagen = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Prod_State = table.Column<bool>(type: "bit", nullable: false),
+                    Imagen = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Producto", x => x.Prod_Id);
                     table.ForeignKey(
-                        name: "FK_Producto_Marca_MarcaId_Marca",
-                        column: x => x.MarcaId_Marca,
+                        name: "FK_Producto_Marca_Id_Marca",
+                        column: x => x.Id_Marca,
                         principalTable: "Marca",
                         principalColumn: "Id_Marca",
                         onDelete: ReferentialAction.Cascade);
@@ -186,10 +161,10 @@ namespace PhoneStore_Website.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Id_Empleado = table.Column<int>(type: "int", nullable: false),
                     empleadoId_Empleado = table.Column<int>(type: "int", nullable: false),
-                    Id_Prov = table.Column<int>(type: "int", nullable: false),
+                    Prov_ID = table.Column<int>(type: "int", nullable: false),
                     proveedoresProv_Id = table.Column<int>(type: "int", nullable: false),
-                    Document = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type_Document = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Doc_Num = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Doc_Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
@@ -240,8 +215,8 @@ namespace PhoneStore_Website.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Id_Empleado = table.Column<int>(type: "int", nullable: false),
                     EmpleadoId_Empleado = table.Column<int>(type: "int", nullable: false),
-                    Id_Cliente = table.Column<int>(type: "int", nullable: false),
-                    ClientesCliente_Id = table.Column<int>(type: "int", nullable: false),
+                    Client_Id = table.Column<int>(type: "int", nullable: false),
+                    ClientesClient_Id = table.Column<int>(type: "int", nullable: false),
                     Pay_Type = table.Column<int>(type: "int", nullable: false),
                     Sale_Status = table.Column<int>(type: "int", nullable: false),
                     Pay_Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -254,10 +229,10 @@ namespace PhoneStore_Website.Migrations
                 {
                     table.PrimaryKey("PK_Ventas", x => x.Sale_Id);
                     table.ForeignKey(
-                        name: "FK_Ventas_Clientes_ClientesCliente_Id",
-                        column: x => x.ClientesCliente_Id,
+                        name: "FK_Ventas_Clientes_ClientesClient_Id",
+                        column: x => x.ClientesClient_Id,
                         principalTable: "Clientes",
-                        principalColumn: "Cliente_Id",
+                        principalColumn: "Client_Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Ventas_Empleado_EmpleadoId_Empleado",
@@ -281,11 +256,11 @@ namespace PhoneStore_Website.Migrations
                 name: "Det_Compras",
                 columns: table => new
                 {
-                    Det_Compra_Id = table.Column<int>(type: "int", nullable: false)
+                    Purc_Det_Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Purchase_Id = table.Column<int>(type: "int", nullable: false),
                     compraPurchase_Id = table.Column<int>(type: "int", nullable: false),
-                    Id_Producto = table.Column<int>(type: "int", nullable: false),
+                    Prod_Id = table.Column<int>(type: "int", nullable: false),
                     productoProd_Id = table.Column<int>(type: "int", nullable: false),
                     Purchase_Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Sale_Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -294,7 +269,7 @@ namespace PhoneStore_Website.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Det_Compras", x => x.Det_Compra_Id);
+                    table.PrimaryKey("PK_Det_Compras", x => x.Purc_Det_Id);
                     table.ForeignKey(
                         name: "FK_Det_Compras_Compras_compraPurchase_Id",
                         column: x => x.compraPurchase_Id,
@@ -346,9 +321,9 @@ namespace PhoneStore_Website.Migrations
                 {
                     Det_Sale_Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Sucursal = table.Column<int>(type: "int", nullable: false),
+                    Sucursal_Id = table.Column<int>(type: "int", nullable: false),
                     sucursalId_Sucursal = table.Column<int>(type: "int", nullable: false),
-                    Venta_Id = table.Column<int>(type: "int", nullable: false),
+                    Sale_Id = table.Column<int>(type: "int", nullable: false),
                     ventaSale_Id = table.Column<int>(type: "int", nullable: false),
                     Prod_Id = table.Column<int>(type: "int", nullable: false),
                     ProductoProd_Id = table.Column<int>(type: "int", nullable: false),
@@ -400,11 +375,6 @@ namespace PhoneStore_Website.Migrations
                 column: "proveedoresProv_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cuenta_Web_Cliente_Id",
-                table: "Cuenta_Web",
-                column: "Cliente_Id");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Det_Compras_compraPurchase_Id",
                 table: "Det_Compras",
                 column: "compraPurchase_Id");
@@ -440,14 +410,14 @@ namespace PhoneStore_Website.Migrations
                 column: "EmpId_Empleado");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Producto_MarcaId_Marca",
+                name: "IX_Producto_Id_Marca",
                 table: "Producto",
-                column: "MarcaId_Marca");
+                column: "Id_Marca");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ventas_ClientesCliente_Id",
+                name: "IX_Ventas_ClientesClient_Id",
                 table: "Ventas",
-                column: "ClientesCliente_Id");
+                column: "ClientesClient_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Ventas_EmpleadoId_Empleado",
@@ -470,9 +440,6 @@ namespace PhoneStore_Website.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Abonos");
-
-            migrationBuilder.DropTable(
-                name: "Cuenta_Web");
 
             migrationBuilder.DropTable(
                 name: "Det_Compras");

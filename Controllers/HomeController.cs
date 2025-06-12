@@ -22,11 +22,6 @@ namespace PhoneStore_Website.Controllers
             return View(await _context.Producto.ToListAsync());
         }
 
-        [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
 
         [HttpGet]
         public async Task<IActionResult> Lista_Producto()

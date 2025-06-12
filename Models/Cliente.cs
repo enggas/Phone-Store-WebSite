@@ -16,20 +16,17 @@ namespace PhoneStore_Website.Models
         [Required(ErrorMessage = "El Nombre Completo del Cliente es Requerido")]
         public required String Client_Fullname { get; set; }
 
-
-        [Required(ErrorMessage = "El Gmail del Cliente es Requerido")]
         public required String Gmail { get; set; }
+
+        public required String Pssword { get; set; }
 
 
         [Required(ErrorMessage = "El Numero de Celular del Cliente es Requerido")]
         public required String Telephone { get; set; }
 
 
-        [Required(ErrorMessage = "El Estado del Cliente es Requerido")]
-        public required bool Client_State { get; set; }
 
 
-        public ICollection<Cuenta_Web> Cuenta_Webs { get; set; } = new List<Cuenta_Web>();
 
     }
 }

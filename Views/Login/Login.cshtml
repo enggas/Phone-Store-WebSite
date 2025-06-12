@@ -1,4 +1,4 @@
-﻿@model PhoneStore_Website.Models.Cuenta_Web
+﻿@model PhoneStore_Website.Models.Cliente
 
 @{
     ViewBag.Title = "Iniciar Sesión";
@@ -97,7 +97,7 @@
 </head>
 <body>
     <div class="login-container">
-        <h2>Login</h2>
+        <h2>Iniciar Sesión</h2>
 
         @using (Html.BeginForm("Login", "Login", FormMethod.Post))
         {
@@ -111,16 +111,18 @@
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(m => m.Password, "Contraseña")
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Ingrese su contraseña" })
-                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                @Html.LabelFor(m => m.Pssword, "Contraseña")
+                @Html.PasswordFor(m => m.Pssword, new { @class = "form-control", placeholder = "Ingrese su contraseña" })
+                @Html.ValidationMessageFor(m => m.Pssword, "", new { @class = "text-danger" })
             </div>
 
             <button type="submit" class="btn-login">Iniciar Sesión</button>
         }
 
         <a href="#" class="forgot-password">¿Has olvidado tu contraseña?</a>
-        <a href="#" class="forgot-password">¿No tienes cuenta? Crear una nueva</a>
+        <a href="@Url.Action("CrearCuenta", "Cuenta")" class="forgot-password">¿No tienes cuenta? Crear una nueva</a>
+
+
 
         @if (!string.IsNullOrEmpty(ViewBag.Error as string))
         {

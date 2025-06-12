@@ -12,8 +12,8 @@ using PhoneStore_Website.Data;
 namespace PhoneStore_Website.Migrations
 {
     [DbContext(typeof(AplicationDBContext))]
-    [Migration("20250612022753_Migracion2")]
-    partial class Migracion2
+    [Migration("20250612053444_MigracionGeneral")]
+    partial class MigracionGeneral
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,10 +80,11 @@ namespace PhoneStore_Website.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Client_State")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Gmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Pssword")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -134,42 +135,6 @@ namespace PhoneStore_Website.Migrations
                     b.HasIndex("proveedoresProv_Id");
 
                     b.ToTable("Compras");
-                });
-
-            modelBuilder.Entity("PhoneStore_Website.Models.Cuenta_Web", b =>
-                {
-                    b.Property<int>("Cuenta_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Cuenta_Id"));
-
-                    b.Property<int>("Client_Id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClienteClient_Id")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Gmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Pssword")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Usuario")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Cuenta_Id");
-
-                    b.HasIndex("ClienteClient_Id");
-
-                    b.ToTable("Cuenta_Web");
                 });
 
             modelBuilder.Entity("PhoneStore_Website.Models.Det_Compra", b =>
@@ -279,7 +244,7 @@ namespace PhoneStore_Website.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Pssword")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -502,6 +467,9 @@ namespace PhoneStore_Website.Migrations
                     b.Property<decimal>("Change_Amount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("Client_Id")
+                        .HasColumnType("int");
+
                     b.Property<int>("ClientesClient_Id")
                         .HasColumnType("int");
 
@@ -509,9 +477,6 @@ namespace PhoneStore_Website.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("Estado_PagoId_Estado_Pago")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id_Cliente")
                         .HasColumnType("int");
 
                     b.Property<int>("Id_Empleado")
@@ -581,17 +546,6 @@ namespace PhoneStore_Website.Migrations
                     b.Navigation("empleado");
 
                     b.Navigation("proveedores");
-                });
-
-            modelBuilder.Entity("PhoneStore_Website.Models.Cuenta_Web", b =>
-                {
-                    b.HasOne("PhoneStore_Website.Models.Cliente", "Cliente")
-                        .WithMany("Cuenta_Webs")
-                        .HasForeignKey("ClienteClient_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cliente");
                 });
 
             modelBuilder.Entity("PhoneStore_Website.Models.Det_Compra", b =>
@@ -698,11 +652,6 @@ namespace PhoneStore_Website.Migrations
                     b.Navigation("Clientes");
 
                     b.Navigation("Empleado");
-                });
-
-            modelBuilder.Entity("PhoneStore_Website.Models.Cliente", b =>
-                {
-                    b.Navigation("Cuenta_Webs");
                 });
 
             modelBuilder.Entity("PhoneStore_Website.Models.Compra", b =>

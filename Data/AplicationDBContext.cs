@@ -18,7 +18,6 @@ namespace PhoneStore_Website.Data
         public DbSet<Proveedores> Proveedores { get; set; }
         public DbSet<Sucursal> Sucursales { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
-        public DbSet<Cuenta_Web> Cuenta_Web { get; set; }
         public DbSet<Empleado> Empleado { get; set; }
         public DbSet<Marca> Marca { get; set; }
         public DbSet<Producto> Producto { get; set; }
