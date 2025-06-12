@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PhoneStore_Website.Models
 {
@@ -7,17 +8,17 @@ namespace PhoneStore_Website.Models
     {
 
         [Key]
-        public int Det_Compra_Id { get; set; }
+        public int Purc_Det_Id { get; set; }
 
 
-        [Required(ErrorMessage = "El Id de la Compra es Requerido")]
+        [ForeignKey("Purchase_Id")]
         public required int Purchase_Id { get; set; }
         public Compra compra { get; set; } = null!;
 
 
 
-        [Required(ErrorMessage = "El Id del Producto es Requerido")]
-        public required int Id_Producto { get; set; }
+        [ForeignKey("Prod_Id")]
+        public required int Prod_Id { get; set; }
         public Producto producto { get; set; } = null!;
 
 

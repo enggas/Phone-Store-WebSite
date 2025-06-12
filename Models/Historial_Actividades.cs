@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PhoneStore_Website.Models
 {
@@ -9,7 +10,7 @@ namespace PhoneStore_Website.Models
         public int Historial_Id { get; set; }
 
 
-        [Required(ErrorMessage = "La Id del Empleado es Requerida")]
+        [ForeignKey("Id_Empleado")]
         public required int Empleado { get; set; }
         public Empleado Emp { get; set; } = null!;
 

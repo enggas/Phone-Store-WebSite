@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PhoneStore_Website.Models
 {
@@ -30,7 +31,7 @@ namespace PhoneStore_Website.Models
         public required int Role_Id { get; set; }
 
 
-        [Required(ErrorMessage = "La Sucursal del Empleado es Requerida")]
+        [ForeignKey("Id_Sucursal")]
         public required int Sucursal_Id { get; set; }
         public Sucursal Sucursal { get; set; } = null!;
 

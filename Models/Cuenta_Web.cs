@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PhoneStore_Website.Models
 {
@@ -9,7 +10,7 @@ namespace PhoneStore_Website.Models
         public int Cuenta_Id { get; set; }
 
 
-        [Required(ErrorMessage = "La Id del Cliente es Requerida")]
+        [ForeignKey("Client_Id")]
         public required int Client_Id { get; set; }
         public Cliente Cliente { get; set; } = null!;
 
@@ -27,7 +28,7 @@ namespace PhoneStore_Website.Models
 
 
         [Required(ErrorMessage = "El Estado de la Cuenta es Requerido")]
-        public required bool Estado_Cuenta { get; set; }
+        public required bool Estado { get; set; }
 
 
 

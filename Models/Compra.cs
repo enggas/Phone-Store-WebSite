@@ -1,6 +1,7 @@
 ﻿
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PhoneStore_Website.Models
 {
@@ -11,22 +12,22 @@ namespace PhoneStore_Website.Models
         public int Purchase_Id { get; set; }
 
 
-        [Required(ErrorMessage = "El Id Del Empleado a cargo de la Compra es Requerido")]
+        [ForeignKey("Id_Empleado")]
         public required int Id_Empleado { get; set; }
         public Empleado empleado { get; set; } = null!;
 
 
-        [Required(ErrorMessage = "El Id Del Proveedor es Requerido")]
-        public required int Id_Prov { get; set; }
+        [ForeignKey("Prov_Id")]
+        public required int Prov_ID { get; set; }
         public Proveedores proveedores { get; set; } = null!;
 
 
-        [Required(ErrorMessage = "El Documento de la Compra es Requerido")]
-        public required String Document { get; set; }
+        [Required(ErrorMessage = "El Numero de Documento es Requerido")]
+        public required String Doc_Num { get; set; }
 
 
         [Required(ErrorMessage = "El Tipo de Documento de la Compra es Requerido")]
-        public required String Type_Document { get; set; }
+        public required String Doc_Type { get; set; }
 
 
         [Required(ErrorMessage = "El Total de la Compra es Requerido")]

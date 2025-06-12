@@ -6,7 +6,7 @@ namespace PhoneStore_Website.Models
     {
 
         [Key]
-        public int Cliente_Id { get; set; }
+        public int Client_Id { get; set; }
 
 
         [Required(ErrorMessage = "La Cedula del Cliente es Requerida")]
@@ -26,7 +26,7 @@ namespace PhoneStore_Website.Models
 
 
         [Required(ErrorMessage = "El Estado del Cliente es Requerido")]
-        public required bool Cliente_Estado { get; set; }
+        public required bool Client_State { get; set; }
 
 
         public ICollection<Cuenta_Web> Cuenta_Webs { get; set; } = new List<Cuenta_Web>();
