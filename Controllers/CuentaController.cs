@@ -31,7 +31,6 @@ namespace PhoneStore_Website.Controllers
                 return View(cliente);
             }
 
-            _context.Clientes.Add(cliente);
             _context.SaveChanges();
 
             // Redirige al login después de crear cuenta

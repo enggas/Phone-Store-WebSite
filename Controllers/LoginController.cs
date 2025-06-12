@@ -43,6 +43,10 @@ namespace PhoneStore_Website.Controllers
                 return View();
             }
         }
+        public ActionResult CrearCuenta()
+        {
+            return View();
+        }
 
         public IActionResult Logout()
         {
