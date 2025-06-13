@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PhoneStore_Website.Data;
 using PhoneStore_Website.Models;
+using System.Security.Claims;
 
 namespace PhoneStore_Website.Controllers
 {
@@ -22,30 +25,40 @@ namespace PhoneStore_Website.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(Cliente cliente)
+        public async Task<IActionResult> Login(string Gmail, string Pssword, string? returnUrl = null)
         {
-            if (!ModelState.IsValid)
+            if (string.IsNullOrWhiteSpace(Gmail) || string.IsNullOrWhiteSpace(Pssword))
             {
-                return View(cliente);
-            }
-
-            var user = await _context.Clientes.FirstOrDefaultAsync(u => u.Gmail == cliente.Gmail && u.Pssword == cliente.Pssword);
-
-            if (user != null)
-            {
-                // Aquí puedes usar autenticación real más adelante
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                ViewBag.Error = "Credenciales incorrectas. Verifique su correo o contraseña.";
+                ModelState.AddModelError("", "El nombre de usuario y la contraseña son obligatorios.");
                 return View();
             }
-        }
-        public ActionResult CrearCuenta()
-        {
-            return View();
+
+            var user = await _context.Cliente.FirstOrDefaultAsync(c => c.Gmail == Gmail);
+
+            if (user == null || user.Pssword != Pssword)
+            {
+                ModelState.AddModelError("", "Credenciales inválidas.");
+                return View();
+            }
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Email, user.Gmail),
+                new Claim("Client_Id", user.Client_Id.ToString())
+            };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
+
         }
 
         public IActionResult Logout()
@@ -55,3 +68,5 @@ namespace PhoneStore_Website.Controllers
         }
     }
 }
+
+

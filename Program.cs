@@ -1,5 +1,6 @@
-using PhoneStore_Website.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using PhoneStore_Website.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,17 @@ var builder = WebApplication.CreateBuilder(args);
 //Configuracion de la conexion a la base de datos
 builder.Services.AddDbContext<PhoneStore_Website.Data.AplicationDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConexionSQL")));
+
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login"; 
+        options.LogoutPath = "/Logout"; 
+    });
+
+
+
 
 
 // Add services to the container.
@@ -28,6 +40,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+
+app.UseAuthentication();
 
 app.MapControllerRoute(
     name: "default",
