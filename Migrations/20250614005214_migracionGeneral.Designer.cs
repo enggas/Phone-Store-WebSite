@@ -12,8 +12,8 @@ using PhoneStore_Website.Data;
 namespace PhoneStore_Website.Migrations
 {
     [DbContext(typeof(AplicationDBContext))]
-    [Migration("20250612053444_MigracionGeneral")]
-    partial class MigracionGeneral
+    [Migration("20250614005214_migracionGeneral")]
+    partial class migracionGeneral
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,10 @@ namespace PhoneStore_Website.Migrations
 
                     b.Property<DateTime>("Abono_Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Card_Num")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Id_Empleado")
                         .HasColumnType("int");
@@ -94,7 +98,7 @@ namespace PhoneStore_Website.Migrations
 
                     b.HasKey("Client_Id");
 
-                    b.ToTable("Clientes");
+                    b.ToTable("Cliente");
                 });
 
             modelBuilder.Entity("PhoneStore_Website.Models.Compra", b =>
@@ -463,6 +467,10 @@ namespace PhoneStore_Website.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Sale_Id"));
+
+                    b.Property<string>("Card_Num")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Change_Amount")
                         .HasColumnType("decimal(18,2)");
