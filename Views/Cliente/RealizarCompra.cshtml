@@ -1,1 +1,51 @@
-﻿
+﻿@model PhoneStore_Website.Models.Venta
+
+@{
+    ViewBag.Title = "Realizar Compra";
+    var productos = ViewBag.Productos as List<PhoneStore_Website.Models.Det_Venta>; // enviados desde el controlador
+    decimal total = productos?.Sum(p => p.Subtotal) ?? 0;
+}
+
+<h2>Realizar Compra</h2>
+
+<form asp-action="RealizarCompra" method="post">
+    <div class="mb-3">
+        <label class="form-label">Número de Tarjeta</label>
+        <input asp-for="Card_Num" class="form-control" maxlength="16" pattern="\d{16}" placeholder="Ingrese los 16 dígitos" />
+        <span asp-validation-for="Card_Num" class="text-danger"></span>
+    </div>
+
+    
+    <h4>Productos Seleccionados</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (productos != null)
+            {
+                foreach (var item in productos)
+                {
+                    <tr>
+                        <td>@item.Producto.Prod_Name</td>
+                        <td>@item.Sale_Price.ToString("C")</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Subtotal.ToString("C")</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <input type="hidden" asp-for="Total_Amount" value="@total" />
+    <input type="hidden" asp-for="Pay_Amount" value="@total" />
+    <input type="hidden" asp-for="Change_Amount" value="0" />
+
+    <button type="submit" class="btn btn-success">Confirmar Compra</button>
+</form>
+
