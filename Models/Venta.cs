@@ -11,8 +11,8 @@ namespace PhoneStore_Website.Models
 
 
         [ForeignKey("Id_Empleado")]
-        public required int Id_Empleado { get; set; }
-        public Empleado Empleado { get; set; } = null!;
+        public required int? Id_Empleado { get; set; }
+        public Empleado? Empleado { get; set; } = null!;
 
 
         [ForeignKey("Client_Id")]

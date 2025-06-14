@@ -12,7 +12,6 @@ namespace PhoneStore_Website.Models
 
         [ForeignKey("Id_Sucursal")]
         public required int Sucursal_Id { get; set; }
-        public Sucursal sucursal { get; set; } = null!;
 
 
         [ForeignKey("Sale_Id")]

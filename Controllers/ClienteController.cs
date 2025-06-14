@@ -60,7 +60,86 @@ namespace PhoneStore_Website.Controllers
             HttpContext.Session.SetString("Carrito", JsonSerializer.Serialize(lista));
 
             return RedirectToAction("Cliente_Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RealizarCompra(Venta ventaForm)
+        {
+            var carritoJson = HttpContext.Session.GetString("Carrito");
+            if (string.IsNullOrEmpty(carritoJson))
+            {
+                TempData["Error"] = "El carrito está vacío.";
+                return RedirectToAction("Cliente_Index");
             }
+
+            var carrito = JsonSerializer.Deserialize<List<Carrito>>(carritoJson);
+            if (carrito == null || carrito.Count == 0)
+            {
+                TempData["Error"] = "No se pudo cargar el carrito.";
+                return RedirectToAction("Cliente_Index");
+            }
+
+            if (!User.Identity?.IsAuthenticated ?? true || string.IsNullOrEmpty(User.Identity?.Name))
+            {
+
+                TempData["Error"] = "Cliente no Registrado.";
+                return RedirectToAction("Cuenta", "CrearCuenta");
+            
+            }
+
+            // Obtener datos del usuario autenticado (cliente)
+            var cliente = await _context.Cliente.FirstOrDefaultAsync(c => c.Gmail == User.Identity.Name);
+            if (cliente == null)
+            {
+                TempData["Error"] = "Cliente no autenticado.";
+                return RedirectToAction("Login", "Login");
+            }
+
+            // Crear nueva venta
+            var venta = new Venta
+            {
+                Client_Id = cliente.Client_Id,
+                Id_Empleado = null, // Cliente realiza la compra
+                Sale_Status = 1, // Pendiente
+                Pay_Type = ventaForm.Pay_Type,
+                Card_Num = ventaForm.Card_Num,
+                Pay_Amount = carrito.Sum(i => i.Subtotal),
+                Total_Amount = carrito.Sum(i => i.Subtotal),
+                Change_Amount = 0,
+                Det_Ventas = new List<Det_Venta>()
+            };
+
+            // Sucursal por defecto
+            int sucursalPredeterminada = 1;
+
+            // Agregar productos al detalle de venta
+            foreach (var item in carrito)
+            {
+                venta.Det_Ventas.Add(new Det_Venta
+                {
+                    Prod_Id = item.Prod_Id,
+                    Quantity = item.Cantidad,
+                    Sale_Price = item.Precio,
+                    Subtotal = item.Subtotal,
+                    Sucursal_Id = sucursalPredeterminada,
+                    Sale_Id = venta.Sale_Id
+                });
+            }
+
+            // Guardar la venta y sus detalles
+            _context.Ventas.Add(venta);
+            await _context.SaveChangesAsync();
+
+            // Limpiar el carrito después de la compra
+            HttpContext.Session.Remove("Carrito");
+
+            TempData["Exito"] = "¡Compra realizada con éxito!";
+            return RedirectToAction("HistorialCompras");
+        }
+
+
+
+
 
         public ActionResult Details(int id)
         {
