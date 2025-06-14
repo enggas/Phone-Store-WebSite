@@ -8,7 +8,6 @@ using System.Security.Claims;
 
 namespace PhoneStore_Website.Controllers
 {
-    [Authorize]
     public class ClienteController : Controller
     {
         private readonly AplicationDBContext _context;
