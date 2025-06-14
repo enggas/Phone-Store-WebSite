@@ -773,11 +773,22 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link btn-outline-primary" asp-action="Lista_Producto" asp-controller="Home">Productos</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
-                    <li class="nav-item"><a class="nav-link login-btn" asp-action="Login" asp-controller="Login">Login</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="loginDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Login
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="loginDropdown">
+                            <li><a class="dropdown-item" asp-controller="Login" asp-action="Login">Portal Clientes</a></li>
+                            <li><a class="dropdown-item" asp-controller="Login" asp-action="LoginEmpleado">Portal Empleados</a></li>
+                        </ul>
+                    </li>
+
+
                 </ul>
             </div>
         </div>
