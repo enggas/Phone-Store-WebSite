@@ -208,5 +208,100 @@ namespace PhoneStore_Website.Controllers
                 return View();
             }
         }
+
+        [HttpGet]
+        [HttpGet]
+        public async Task<IActionResult> DetalleCliente()
+        {
+            var clientIdClaim = User.FindFirst("Client_Id")?.Value;
+            if (string.IsNullOrEmpty(clientIdClaim) || !int.TryParse(clientIdClaim, out int clientId))
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
+            var cliente = await _context.Cliente.FirstOrDefaultAsync(c => c.Client_Id == clientId);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            return View(cliente);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditarCuentaCliente()
+        {
+            var clientIdClaim = User.FindFirst("Client_Id")?.Value;
+            if (string.IsNullOrEmpty(clientIdClaim) || !int.TryParse(clientIdClaim, out int clientId))
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
+            var cliente = await _context.Cliente.FirstOrDefaultAsync(c => c.Client_Id == clientId);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            return View(cliente);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditarCuentaCliente(Cliente model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var clientIdClaim = User.FindFirst("Client_Id")?.Value;
+            if (string.IsNullOrEmpty(clientIdClaim) || !int.TryParse(clientIdClaim, out int clientId))
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
+            var cliente = await _context.Cliente.FirstOrDefaultAsync(c => c.Client_Id == clientId);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            // Validaciones manuales adicionales
+            if (string.IsNullOrWhiteSpace(model.Client_Fullname))
+            {
+                ModelState.AddModelError("Client_Fullname", "El nombre completo es obligatorio.");
+                return View(model);
+            }
+
+            if (string.IsNullOrWhiteSpace(model.Gmail))
+            {
+                ModelState.AddModelError("Gmail", "El correo electrónico es obligatorio.");
+                return View(model);
+            }
+
+            if (string.IsNullOrWhiteSpace(model.Pssword))
+            {
+                ModelState.AddModelError("Pssword", "La contraseña es obligatoria.");
+                return View(model);
+            }
+
+            if (string.IsNullOrWhiteSpace(model.Telephone))
+            {
+                ModelState.AddModelError("Telephone", "El número de teléfono es obligatorio.");
+                return View(model);
+            }
+
+            // Actualizar campos
+            cliente.Client_Fullname = model.Client_Fullname;
+            cliente.Gmail = model.Gmail;
+            cliente.Pssword = model.Pssword;
+            cliente.Telephone = model.Telephone;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("DetalleCliente");
+        }
+
     }
 }
