@@ -41,7 +41,6 @@ namespace PhoneStore_Website.Models
 
         public ICollection<Venta> Ventas { get; set; } = new List<Venta>();
         public ICollection<Compra> Compras { get; set; } = new List<Compra>();
-        public ICollection<Abonos> Abonos { get; set; } = new List<Abonos>();
         public ICollection<Historial_Actividades> Historial { get; set; } = new List<Historial_Actividades>();
 
 

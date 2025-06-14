@@ -27,7 +27,6 @@ namespace PhoneStore_Website.Data
         public DbSet<Estado_Pago> Estado_Pagos { get; set; }
         public DbSet<Venta> Ventas { get; set; }
         public DbSet<Det_Venta> Det_Ventas { get; set; }
-        public DbSet<Abonos> Abonos { get; set; }
         public DbSet<Historial_Actividades> Historial_Actividades { get; set; }
 
 

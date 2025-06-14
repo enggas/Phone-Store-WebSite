@@ -42,6 +42,5 @@ namespace PhoneStore_Website.Models
 
 
         public ICollection<Det_Venta> Det_Ventas { get; set; } = new List<Det_Venta>();
-        public ICollection<Abonos> Abonos { get; set; } = new List<Abonos>();
     }
 }
