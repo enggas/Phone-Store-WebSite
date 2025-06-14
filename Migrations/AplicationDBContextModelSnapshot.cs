@@ -22,49 +22,6 @@ namespace PhoneStore_Website.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("PhoneStore_Website.Models.Abonos", b =>
-                {
-                    b.Property<int>("Abono_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Abono_Id"));
-
-                    b.Property<decimal>("Abono_Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("Abono_Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Card_Num")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Id_Empleado")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Observaciones")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Sale_Id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("empleadoId_Empleado")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ventaSale_Id")
-                        .HasColumnType("int");
-
-                    b.HasKey("Abono_Id");
-
-                    b.HasIndex("empleadoId_Empleado");
-
-                    b.HasIndex("ventaSale_Id");
-
-                    b.ToTable("Abonos");
-                });
-
             modelBuilder.Entity("PhoneStore_Website.Models.Cliente", b =>
                 {
                     b.Property<int>("Client_Id")

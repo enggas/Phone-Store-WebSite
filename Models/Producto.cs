@@ -44,7 +44,7 @@ namespace PhoneStore_Website.Models
         [Required(ErrorMessage = "El Estado del Producto es Requerido")]
         public required bool Prod_State { get; set; }
 
-        public String Imagen { get; set; }
+        public required String Imagen { get; set; }
 
 
 
