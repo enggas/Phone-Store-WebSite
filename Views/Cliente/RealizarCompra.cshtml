@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "Realizar Compra";
-    var productos = ViewBag.Productos as List<PhoneStore_Website.Models.Det_Venta>; // enviados desde el controlador
+    var productos = ViewBag.Carrito as List<PhoneStore_Website.Models.Carrito>; // enviados desde el controlador
     decimal total = productos?.Sum(p => p.Subtotal) ?? 0;
 }
 
@@ -32,9 +32,9 @@
                 foreach (var item in productos)
                 {
                     <tr>
-                        <td>@item.Producto.Prod_Name</td>
-                        <td>@item.Sale_Price.ToString("C")</td>
-                        <td>@item.Quantity</td>
+                        <td>@item.Nombre</td>
+                        <td>@item.Precio.ToString("C")</td>
+                        <td>@item.Cantidad</td>
                         <td>@item.Subtotal.ToString("C")</td>
                     </tr>
                 }
