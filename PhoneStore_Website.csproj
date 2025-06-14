@@ -16,10 +16,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Views\Cliente\" />
-    <Folder Include="Views\EncargadoVentas\" />
-    <Folder Include="Views\EncargadoCompras\" />
-    <Folder Include="Views\Administrador\" />
     <Folder Include="wwwroot\images\Productos\" />
   </ItemGroup>
 
