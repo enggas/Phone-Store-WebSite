@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using PhoneStore_Website.Data;
 using PhoneStore_Website.Models;
+using System.Security.Claims;
 
 namespace PhoneStore_Website.Controllers
 {
+    [Authorize]
     public class ClienteController : Controller
     {
         private readonly AplicationDBContext _context;
@@ -23,7 +25,7 @@ namespace PhoneStore_Website.Controllers
         }
 
         public IActionResult AgregarAlCarrito(int productoId, int cantidad)
-        {
+            {
             // Obtener carrito actual desde la sesión
             var carrito = HttpContext.Session.GetString("Carrito");
             List<Carrito> lista;
@@ -48,7 +50,7 @@ namespace PhoneStore_Website.Controllers
                 existente.Cantidad += cantidad;
             else
                 lista.Add(new Carrito
-                {
+            {
                     Prod_Id = producto.Prod_Id,
                     Nombre = producto.Prod_Name,
                     Precio = producto.Sale_Price,
@@ -59,7 +61,7 @@ namespace PhoneStore_Website.Controllers
             HttpContext.Session.SetString("Carrito", JsonSerializer.Serialize(lista));
 
             return RedirectToAction("Cliente_Index");
-        }
+            }
 
         public ActionResult Details(int id)
         {
@@ -82,16 +84,16 @@ namespace PhoneStore_Website.Controllers
                 return RedirectToAction(nameof(Index));
             }
             catch
-            {
+        {
                 return View();
             }
         }
 
         // GET: ClienteController/Edit/5
         public ActionResult Edit(int id)
-        {
+            {
             return View();
-        }
+            }
 
         // POST: ClienteController/Edit/5
         [HttpPost]
@@ -110,9 +112,9 @@ namespace PhoneStore_Website.Controllers
 
         // GET: ClienteController/Delete/5
         public ActionResult Delete(int id)
-        {
+            {
             return View();
-        }
+            }
 
         // POST: ClienteController/Delete/5
         [HttpPost]

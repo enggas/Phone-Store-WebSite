@@ -1,5 +1,106 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model PhoneStore_Website.Models.Cliente
+
 @{
+    ViewBag.Title = "Detalles de Cuenta";
+    Layout = null;
 }
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Detalles de Cuenta - Phone Store</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #08515E;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .detail-container {
+            background-color: #FFFFFF;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h2 {
+            color: #08515E;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .detail-item {
+            margin-bottom: 20px;
+        }
+
+            .detail-item label {
+                font-weight: bold;
+                color: #2E2E2E;
+                display: block;
+                margin-bottom: 6px;
+            }
+
+            .detail-item span {
+                display: block;
+                padding: 10px;
+                background-color: #f2f2f2;
+                border-radius: 6px;
+                color: #333;
+            }
+
+        .btn-edit {
+            background-color: #08515E;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            width: 100%;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+            .btn-edit:hover {
+                background-color: #063b45;
+            }
+    </style>
+</head>
+<body>
+    <div class="detail-container">
+        <h2>Detalles de Cuenta</h2>
+
+        <div class="detail-item">
+            <label>Cédula</label>
+            <span>@Model.Cedula</span>
+        </div>
+
+        <div class="detail-item">
+            <label>Nombre completo</label>
+            <span>@Model.Client_Fullname</span>
+        </div>
+
+        <div class="detail-item">
+            <label>Correo electrónico</label>
+            <span>@Model.Gmail</span>
+        </div>
+
+        <div class="detail-item">
+            <label>Teléfono</label>
+            <span>@Model.Telephone</span>
+        </div>
+
+        <a href="@Url.Action("EditarCliente", "Cliente", new { id = Model.Client_Id })" class="btn-edit">Editar Información</a>
+    </div>
+</body>
+</html>
