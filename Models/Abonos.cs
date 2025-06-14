@@ -14,7 +14,7 @@ namespace PhoneStore_Website.Models
         public required int Sale_Id { get; set; }
         public Venta venta { get; set; } = null!;
 
-        public String Card_Num { get; set; }
+        public required String Card_Num { get; set; }
 
 
         [Required(ErrorMessage = "El Monto del Abono es Requerido")]

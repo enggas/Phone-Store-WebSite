@@ -27,7 +27,7 @@ namespace PhoneStore_Website.Models
         [Required(ErrorMessage = "El Estado del Pago es Requerido")]
         public required int Sale_Status { get; set; }
 
-        public String Card_Num { get; set; }
+        public required String Card_Num { get; set; }
 
         [Required(ErrorMessage = "El Monto a Pagar es Requerido")]
         public required decimal Pay_Amount { get; set; }

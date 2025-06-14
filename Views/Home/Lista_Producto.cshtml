@@ -3,8 +3,130 @@
     ViewData["Title"] = "Lista_Producto";
 }
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary-color: #005f6b;
+        --primary-dark: #003d44;
+        --primary-light: #008c9e;
+        --secondary-color: #ff6b6b;
+        --secondary-dark: #ff5252;
+        --light-bg: #f8f9fa;
+        --dark-text: #2d3436;
+        --light-text: #f5f6fa;
+        --gray-text: #636e72;
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
 
 <style>
+
+    /* Estilos generales */
+    body {
+        font-family: 'Poppins', sans-serif;
+        color: var(--dark-text);
+        background-color: #fff;
+        overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: 600;
+    }
+
+    a {
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+    .btn-primary {
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+        font-weight: 500;
+        padding: 0.6rem 1.5rem;
+        transition: var(--transition);
+    }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-dark);
+            border-color: var(--secondary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+    .btn-outline-primary {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+
+
+    .navbar {
+        padding: 1rem 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        background-color: var(--primary-color) !important;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .navbar-brand {
+        font-weight: 700;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        color: var(--light-text);
+    }
+
+    .navbar-brand img {
+            margin-right: 10px;
+            height: 40px;
+    }
+
+    .nav-link {
+        color: var(--light-text) !important;
+        font-weight: 500;
+        margin: 0 10px;
+        position: relative;
+        padding: 0.5rem 1rem !important;
+     }
+
+    .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--secondary-color);
+            transition: var(--transition);
+     }
+
+     .nav-link:hover::after {
+            width: 100%;
+      }
+
+     .login-btn {
+            background-color: var(--secondary-color);
+            color: var(--light-text) !important;
+            border-radius: 30px;
+            padding: 0.5rem 1.5rem !important;
+            margin-left: 10px;
+      }
+
+     .login-btn:hover {
+            background-color: var(--secondary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
     .search-bar {
         background-color: #005f6b;
         padding: 1rem;
@@ -44,6 +166,28 @@
     }
 </style>
 
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">PhoneStore</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Login">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
 <h2 class="text-center mt-4">Listado de Productos</h2>
 
 <!-- Barra de búsqueda -->
@@ -59,7 +203,6 @@
                 <div class="card-custom">
                     <img src="~/images/@producto.Imagen" alt="@producto.Prod_Name" style="height: 200px; object-fit: contain; width: 100%;" />
 
-                    <p><span class="card-label">Código:</span> @producto.Prod_Cod</p>
                     <p><span class="card-label">Nombre:</span> @producto.Prod_Name</p>
                     <p><span class="card-label">Descripción:</span> @producto.Prod_Description</p>
                     <p><span class="card-label">Marca:</span> @producto.Marca.Marca_Name</p>
