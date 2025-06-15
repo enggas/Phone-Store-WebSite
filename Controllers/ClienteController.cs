@@ -19,18 +19,30 @@ namespace PhoneStore_Website.Controllers
         }
 
         [HttpGet]
-        public ActionResult Cliente_Index()
+        public ActionResult Cliente_Index(string search)
         {
+
+
+            var productos = _context.Producto
+            .Where(p => p.Prod_State && (string.IsNullOrEmpty(search) || p.Prod_Name.Contains(search)))
+            .ToList();
+
+            var marcas = _context.Set<Marca>()
+                .Where(m => m.Marca_State)
+                .ToList();
+
             var model = new ClienteIndexViewModel
             {
-                Productos = new List<Producto>(), // O carga tus productos aquí
-                Marcas = new List<Marca>()        // O carga tus marcas aquí
+                Productos = productos,
+                Marcas = marcas
             };
+
             return View(model);
 
         }
 
-        public IActionResult AgregarAlCarrito(int productoId, int cantidad)
+        [HttpPost]
+        public ActionResult AgregarAlCarrito(int productoId, int cantidad)
             {
             // Obtener carrito actual desde la sesión
             var carrito = HttpContext.Session.GetString("Carrito");
@@ -69,8 +81,23 @@ namespace PhoneStore_Website.Controllers
             return RedirectToAction("Cliente_Index");
         }
 
+
+        [HttpGet]
+        public IActionResult Carrito()
+        {
+            var carritoJson = HttpContext.Session.GetString("Carrito");
+            if (string.IsNullOrEmpty(carritoJson))
+            {
+                return View(new List<Carrito>());
+            }
+            var carrito = JsonSerializer.Deserialize<List<Carrito>>(carritoJson);
+            return View(carrito ?? new List<Carrito>());
+        }
+
+
+
         [HttpPost]
-        public async Task<IActionResult> RealizarCompra(Venta ventaForm)
+        public async Task<IActionResult> RealizarCompra(int Pay_Type, string Card_Num)
         {
             var carritoJson = HttpContext.Session.GetString("Carrito");
             if (string.IsNullOrEmpty(carritoJson))
@@ -88,13 +115,10 @@ namespace PhoneStore_Website.Controllers
 
             if (!User.Identity?.IsAuthenticated ?? true || string.IsNullOrEmpty(User.Identity?.Name))
             {
-
-                TempData["Error"] = "Cliente no Registrado.";
-                return RedirectToAction("Cuenta", "CrearCuenta");
-            
+                TempData["Error"] = "Cliente no registrado.";
+                return RedirectToAction("CrearCuenta", "Cuenta");
             }
 
-            // Obtener datos del usuario autenticado (cliente)
             var cliente = await _context.Cliente.FirstOrDefaultAsync(c => c.Gmail == User.Identity.Name);
             if (cliente == null)
             {
@@ -102,22 +126,21 @@ namespace PhoneStore_Website.Controllers
                 return RedirectToAction("Login", "Login");
             }
 
-            // Crear nueva venta
+            Pay_Type = 1; // Asignar un valor por defecto si no se proporciona uno válido
+
             var venta = new Venta
             {
                 Client_Id = cliente.Client_Id,
-                Id_Empleado = null, // Cliente realiza la compra
-                Sale_Status = 1, // Pendiente
-                Pay_Type = ventaForm.Pay_Type,
-                Card_Num = ventaForm.Card_Num,
+                Id_Empleado = null,
+                Sale_Status = 1,
+                Pay_Type = Pay_Type,
+                Card_Num = Card_Num,
                 Pay_Amount = carrito.Sum(i => i.Subtotal),
                 Total_Amount = carrito.Sum(i => i.Subtotal),
                 Change_Amount = 0,
                 Det_Ventas = new List<Det_Venta>()
             };
 
-
-            // Agregar productos al detalle de venta
             foreach (var item in carrito)
             {
                 venta.Det_Ventas.Add(new Det_Venta
@@ -130,13 +153,10 @@ namespace PhoneStore_Website.Controllers
                 });
             }
 
-            // Guardar la venta y sus detalles
             _context.Ventas.Add(venta);
             await _context.SaveChangesAsync();
 
-            // Limpiar el carrito después de la compra
             HttpContext.Session.Remove("Carrito");
-
             TempData["Exito"] = "¡Compra realizada con éxito!";
             return RedirectToAction("HistorialCompras");
         }

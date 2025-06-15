@@ -1,0 +1,56 @@
+﻿@model List<Carrito>
+
+<h2>Carrito de Compras</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>Tu carrito está vacío.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio Unitario</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Nombre</td>
+                    <td>@item.Precio.ToString("C")</td>
+                    <td>@item.Cantidad</td>
+                    <td>@item.Subtotal.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="3" class="text-end">Total:</th>
+                <th>@Model.Sum(i => i.Subtotal).ToString("C")</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    <form asp-action="RealizarCompra" method="post">
+        <div class="mb-3">
+            <label for="Pay_Type" class="form-label">Método de pago</label>
+            <select name="Pay_Type" class="form-select" required>
+                <option value="">Seleccione...</option>
+                <option value="Tarjeta">Tarjeta</option>
+                <option value="Efectivo">Efectivo</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="Card_Num" class="form-label">Número de tarjeta (opcional si es efectivo)</label>
+            <input name="Card_Num" type="text" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-success">Confirmar compra</button>
+    </form>
+}
