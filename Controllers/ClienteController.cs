@@ -30,7 +30,6 @@ namespace PhoneStore_Website.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public ActionResult Cliente_Index(string search)
         {
 
@@ -54,7 +53,6 @@ namespace PhoneStore_Website.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public ActionResult AgregarAlCarrito(int productoId, int cantidad)
             {
             // Obtener carrito actual desde la sesión
@@ -96,7 +94,6 @@ namespace PhoneStore_Website.Controllers
 
 
         [HttpGet]
-        [Authorize]
         public IActionResult Carrito()
         {
             var carritoJson = HttpContext.Session.GetString("Carrito");
@@ -111,7 +108,6 @@ namespace PhoneStore_Website.Controllers
 
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> RealizarCompra(int Pay_Type, string Card_Num)
         {
 
