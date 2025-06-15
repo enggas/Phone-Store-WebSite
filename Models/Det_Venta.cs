@@ -9,13 +9,15 @@ namespace PhoneStore_Website.Models
         [Key]
         public int Det_Sale_Id { get; set; }
 
-        [ForeignKey("Sale_Id")]
+        
         public required int Sale_Id { get; set; }
+        [ForeignKey("Sale_Id")]
         public Venta venta { get; set; } = null!;
 
 
-        [ForeignKey("Prod_Id")]
+        
         public required int Prod_Id { get; set; }
+        [ForeignKey("Prod_Id")]
         public Producto Producto { get; set; }= null!;
 
 

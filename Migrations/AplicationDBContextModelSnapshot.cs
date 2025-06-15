@@ -162,20 +162,12 @@ namespace PhoneStore_Website.Migrations
                     b.Property<decimal>("Subtotal")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Sucursal_Id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("sucursalId_Sucursal")
-                        .HasColumnType("int");
-
                     b.Property<int>("ventaSale_Id")
                         .HasColumnType("int");
 
                     b.HasKey("Det_Sale_Id");
 
                     b.HasIndex("ProductoProd_Id");
-
-                    b.HasIndex("sucursalId_Sucursal");
 
                     b.HasIndex("ventaSale_Id");
 
@@ -202,25 +194,17 @@ namespace PhoneStore_Website.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("Pssword")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Role_Id")
                         .HasColumnType("int");
 
-                    b.Property<int>("SucursalId_Sucursal")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Sucursal_Id")
-                        .HasColumnType("int");
-
                     b.Property<bool>("User_State")
                         .HasColumnType("bit");
 
                     b.HasKey("Id_Empleado");
-
-                    b.HasIndex("SucursalId_Sucursal");
 
                     b.ToTable("Empleado");
                 });
@@ -376,27 +360,6 @@ namespace PhoneStore_Website.Migrations
                     b.ToTable("Proveedores");
                 });
 
-            modelBuilder.Entity("PhoneStore_Website.Models.Sucursal", b =>
-                {
-                    b.Property<int>("Id_Sucursal")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Sucursal"));
-
-                    b.Property<string>("Direccion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nombre_Sucursal")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id_Sucursal");
-
-                    b.ToTable("Sucursales");
-                });
-
             modelBuilder.Entity("PhoneStore_Website.Models.Tipos_Pago", b =>
                 {
                     b.Property<int>("Id_Tipo_Pago")
@@ -432,63 +395,32 @@ namespace PhoneStore_Website.Migrations
                     b.Property<int>("Client_Id")
                         .HasColumnType("int");
 
-                    b.Property<int>("ClientesClient_Id")
+                    b.Property<int?>("Id_Empleado")
                         .HasColumnType("int");
 
-                    b.Property<int>("EmpleadoId_Empleado")
+                    b.Property<int>("Id_Estado_Pago")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Estado_PagoId_Estado_Pago")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id_Empleado")
+                    b.Property<int>("Id_Tipo_Pago")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Pay_Amount")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Pay_Type")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Sale_Status")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Tipos_PagoId_Tipo_Pago")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("Total_Amount")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Sale_Id");
 
-                    b.HasIndex("ClientesClient_Id");
+                    b.HasIndex("Client_Id");
 
-                    b.HasIndex("EmpleadoId_Empleado");
+                    b.HasIndex("Id_Empleado");
 
-                    b.HasIndex("Estado_PagoId_Estado_Pago");
+                    b.HasIndex("Id_Estado_Pago");
 
-                    b.HasIndex("Tipos_PagoId_Tipo_Pago");
+                    b.HasIndex("Id_Tipo_Pago");
 
-                    b.ToTable("Ventas");
-                });
-
-            modelBuilder.Entity("PhoneStore_Website.Models.Abonos", b =>
-                {
-                    b.HasOne("PhoneStore_Website.Models.Empleado", "empleado")
-                        .WithMany("Abonos")
-                        .HasForeignKey("empleadoId_Empleado")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PhoneStore_Website.Models.Venta", "venta")
-                        .WithMany("Abonos")
-                        .HasForeignKey("ventaSale_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("empleado");
-
-                    b.Navigation("venta");
+                    b.ToTable("Venta");
                 });
 
             modelBuilder.Entity("PhoneStore_Website.Models.Compra", b =>
@@ -537,34 +469,15 @@ namespace PhoneStore_Website.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PhoneStore_Website.Models.Sucursal", "sucursal")
-                        .WithMany("Det_Ventas")
-                        .HasForeignKey("sucursalId_Sucursal")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("PhoneStore_Website.Models.Venta", "venta")
-                        .WithMany("Det_Ventas")
+                        .WithMany("Det_Venta")
                         .HasForeignKey("ventaSale_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Producto");
 
-                    b.Navigation("sucursal");
-
                     b.Navigation("venta");
-                });
-
-            modelBuilder.Entity("PhoneStore_Website.Models.Empleado", b =>
-                {
-                    b.HasOne("PhoneStore_Website.Models.Sucursal", "Sucursal")
-                        .WithMany("Empleados")
-                        .HasForeignKey("SucursalId_Sucursal")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Sucursal");
                 });
 
             modelBuilder.Entity("PhoneStore_Website.Models.Historial_Actividades", b =>
@@ -591,29 +504,35 @@ namespace PhoneStore_Website.Migrations
 
             modelBuilder.Entity("PhoneStore_Website.Models.Venta", b =>
                 {
-                    b.HasOne("PhoneStore_Website.Models.Cliente", "Clientes")
+                    b.HasOne("PhoneStore_Website.Models.Cliente", "Cliente")
                         .WithMany()
-                        .HasForeignKey("ClientesClient_Id")
+                        .HasForeignKey("Client_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PhoneStore_Website.Models.Empleado", "Empleado")
                         .WithMany("Ventas")
-                        .HasForeignKey("EmpleadoId_Empleado")
+                        .HasForeignKey("Id_Empleado");
+
+                    b.HasOne("PhoneStore_Website.Models.Estado_Pago", "Estado_Pago")
+                        .WithMany("Venta")
+                        .HasForeignKey("Id_Estado_Pago")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PhoneStore_Website.Models.Estado_Pago", null)
-                        .WithMany("Ventas")
-                        .HasForeignKey("Estado_PagoId_Estado_Pago");
+                    b.HasOne("PhoneStore_Website.Models.Tipos_Pago", "Tipos_Pago")
+                        .WithMany("Venta")
+                        .HasForeignKey("Id_Tipo_Pago")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("PhoneStore_Website.Models.Tipos_Pago", null)
-                        .WithMany("Ventas")
-                        .HasForeignKey("Tipos_PagoId_Tipo_Pago");
-
-                    b.Navigation("Clientes");
+                    b.Navigation("Cliente");
 
                     b.Navigation("Empleado");
+
+                    b.Navigation("Estado_Pago");
+
+                    b.Navigation("Tipos_Pago");
                 });
 
             modelBuilder.Entity("PhoneStore_Website.Models.Compra", b =>
@@ -623,8 +542,6 @@ namespace PhoneStore_Website.Migrations
 
             modelBuilder.Entity("PhoneStore_Website.Models.Empleado", b =>
                 {
-                    b.Navigation("Abonos");
-
                     b.Navigation("Compras");
 
                     b.Navigation("Historial");
@@ -634,7 +551,7 @@ namespace PhoneStore_Website.Migrations
 
             modelBuilder.Entity("PhoneStore_Website.Models.Estado_Pago", b =>
                 {
-                    b.Navigation("Ventas");
+                    b.Navigation("Venta");
                 });
 
             modelBuilder.Entity("PhoneStore_Website.Models.Marca", b =>
@@ -652,23 +569,14 @@ namespace PhoneStore_Website.Migrations
                     b.Navigation("Compras");
                 });
 
-            modelBuilder.Entity("PhoneStore_Website.Models.Sucursal", b =>
-                {
-                    b.Navigation("Det_Ventas");
-
-                    b.Navigation("Empleados");
-                });
-
             modelBuilder.Entity("PhoneStore_Website.Models.Tipos_Pago", b =>
                 {
-                    b.Navigation("Ventas");
+                    b.Navigation("Venta");
                 });
 
             modelBuilder.Entity("PhoneStore_Website.Models.Venta", b =>
                 {
-                    b.Navigation("Abonos");
-
-                    b.Navigation("Det_Ventas");
+                    b.Navigation("Det_Venta");
                 });
 #pragma warning restore 612, 618
         }

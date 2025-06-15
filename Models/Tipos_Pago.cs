@@ -14,7 +14,7 @@ namespace PhoneStore_Website.Models
         public required String Descripcion { get; set; }
 
 
-        public ICollection<Venta> Ventas { get; set; } = new List<Venta>();
+        public ICollection<Venta> Venta { get; set; } = new List<Venta>();
 
     }
 }

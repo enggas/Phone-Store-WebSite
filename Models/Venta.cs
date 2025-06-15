@@ -10,22 +10,31 @@ namespace PhoneStore_Website.Models
         public int Sale_Id { get; set; }
 
 
+        
+        public int? Id_Empleado { get; set; }
         [ForeignKey("Id_Empleado")]
-        public required int? Id_Empleado { get; set; }
-        public Empleado? Empleado { get; set; } = null!;
+        public Empleado Empleado { get; set; } = null!;
 
 
-        [ForeignKey("Client_Id")]
+        
         public required int Client_Id { get; set; }
-        public Cliente Clientes { get; set; } = null!;
+        [ForeignKey("Client_Id")]
+        public Cliente Cliente { get; set; } = null!;
 
 
         [Required(ErrorMessage = "El Tipo de Pago es Requerido")]
-        public required int Pay_Type { get; set; }
+
+        public required int Id_Tipo_Pago { get; set; }
+        [ForeignKey("Id_Tipo_Pago")]
+        public Tipos_Pago Tipos_Pago { get; set; } = null!;
+
 
 
         [Required(ErrorMessage = "El Estado del Pago es Requerido")]
-        public required int Sale_Status { get; set; }
+        public required int Id_Estado_Pago { get; set; }
+        [ForeignKey("Id_Estado_Pago")]
+        public Estado_Pago Estado_Pago { get; set; } = null!;
+
 
         public required String Card_Num { get; set; }
 
@@ -41,6 +50,6 @@ namespace PhoneStore_Website.Models
         public required decimal Total_Amount { get; set; }
 
 
-        public ICollection<Det_Venta> Det_Ventas { get; set; } = new List<Det_Venta>();
+        public ICollection<Det_Venta> Det_Venta { get; set; } = new List<Det_Venta>();
     }
 }

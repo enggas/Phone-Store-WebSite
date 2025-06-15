@@ -137,32 +137,37 @@ namespace PhoneStore_Website.Controllers
                 return RedirectToAction("CrearCuenta", "Cuenta");
             }
 
-            var cliente = await _context.Cliente.FirstOrDefaultAsync(c => c.Gmail == User.Identity.Name);
+            var clientIdClaim = User.FindFirst("Client_Id")?.Value;
+            if (string.IsNullOrEmpty(clientIdClaim) || !int.TryParse(clientIdClaim, out int clientId))
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
+            var cliente = await _context.Cliente.FirstOrDefaultAsync(c => c.Client_Id == clientId);
             if (cliente == null)
             {
-                TempData["Error"] = "Cliente no autenticado.";
-                return RedirectToAction("Login", "Login");
+                return NotFound();
             }
 
             var venta = new Venta
             {
                 Client_Id = cliente.Client_Id,
                 Id_Empleado = null,
-                Sale_Status = 1,
-                Pay_Type = Pay_Type,
+                Id_Estado_Pago = 1,
+                Id_Tipo_Pago = Pay_Type,
                 Card_Num = Card_Num ?? "",
                 Pay_Amount = carrito.Sum(i => i.Subtotal),
                 Total_Amount = carrito.Sum(i => i.Subtotal),
                 Change_Amount = 0,
-                Det_Ventas = new List<Det_Venta>()
+                Det_Venta = new List<Det_Venta>()
             };
 
-            _context.Ventas.Add(venta);
+            _context.Venta.Add(venta);
             await _context.SaveChangesAsync(); // Para obtener Sale_Id
 
             foreach (var item in carrito)
             {
-                venta.Det_Ventas.Add(new Det_Venta
+                venta.Det_Venta.Add(new Det_Venta
                 {
                     Prod_Id = item.Prod_Id,
                     Quantity = item.Cantidad,
