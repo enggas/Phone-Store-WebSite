@@ -51,17 +51,29 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var empleado in Model)
+
+                    @if (Model != null)
+                    {
+                        @foreach (var empleado in Model)
+                        {
+                            <tr>
+                                <td>@empleado.Id_Empleado</td>
+                                <td>@empleado.Cedula</td>
+                                <td>@empleado.Employee_Fullname</td>
+                                <td>@empleado.Gmail</td>
+                                <td>@empleado.Role_Id</td>
+                                <td>@empleado.User_State</td>
+                            </tr>
+                        }
+                    }
+                    else
                     {
                         <tr>
-                            <td>@empleado.Id_Empleado</td>
-                            <td>@empleado.Cedula</td>
-                            <td>@empleado.Employee_Fullname</td>
-                            <td>@empleado.Gmail</td>
-                            <td>@empleado.Role_Id</td>
-                            <td>@empleado.User_State</td>
+                            <td colspan="6">No hay empleados registrados.</td>
                         </tr>
-                    }
+					}
+
+                    
                 </tbody>
             </table>
 

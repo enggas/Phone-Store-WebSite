@@ -23,26 +23,26 @@ namespace PhoneStore_Website.Controllers
         [HttpGet]
         public IActionResult LoginEmpleado()
         {
-            return View("LoginEmpleado");
+            return View();
         }
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LoginEmpleado(string Gmail, string Password, string? returnUrl = null)
+        public async Task<IActionResult> LoginEmpleado(string Gmail, string Pssword, string? returnUrl = null)
         {
-            if (string.IsNullOrWhiteSpace(Gmail) || string.IsNullOrWhiteSpace(Password))
+            if (string.IsNullOrWhiteSpace(Gmail) || string.IsNullOrWhiteSpace(Pssword))
             {
                 ModelState.AddModelError("", "El correo electrónico y la contraseña son obligatorios.");
-                return View("LoginEmpleado");
+                return View();
             }
 
             var empleado = await _context.Empleado.FirstOrDefaultAsync(e => e.Gmail == Gmail);
 
-            if (empleado == null || empleado.Password != Password || !empleado.User_State)
+            if (empleado == null || empleado.Pssword != Pssword || !empleado.User_State)
             {
                 ModelState.AddModelError("", "Credenciales inválidas o usuario inactivo.");
-                return View("LoginEmpleado");
+                return View();
             }
 
             // Crear los claims del empleado
@@ -70,9 +70,6 @@ namespace PhoneStore_Website.Controllers
 
                 case 3: // Encargado de Ventas
                     return RedirectToAction("Dashboard", "Ventas");
-
-                case 4: // Cliente (si se permitiera login desde aquí)
-                    return RedirectToAction("Catalogo", "Cliente");
 
                 default:
                     // Rol no reconocido

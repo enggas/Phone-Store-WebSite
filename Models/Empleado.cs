@@ -23,7 +23,7 @@ namespace PhoneStore_Website.Models
 
 
         [Required(ErrorMessage = "La Contraseña es Requerido")]
-        public required String Password { get; set; }
+        public required String Pssword { get; set; }
         
 
 
