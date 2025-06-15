@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PhoneStore_Website.Data;
@@ -6,6 +7,7 @@ using PhoneStore_Website.Models;
 using PhoneStore_Website.Models.ViewModels.Cliente;
 using System.Security.Claims;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace PhoneStore_Website.Controllers
 {
@@ -18,7 +20,17 @@ namespace PhoneStore_Website.Controllers
             _context = context;
         }
 
+        private bool ValidarNumeroTarjeta(string cardNumber)
+        {
+            if (string.IsNullOrWhiteSpace(cardNumber))
+                return false;
+
+            var regex = new Regex(@"^\d{4}-\d{4}-\d{4}-\d{4}$");
+            return regex.IsMatch(cardNumber);
+        }
+
         [HttpGet]
+        [Authorize]
         public ActionResult Cliente_Index(string search)
         {
 
@@ -42,6 +54,7 @@ namespace PhoneStore_Website.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult AgregarAlCarrito(int productoId, int cantidad)
             {
             // Obtener carrito actual desde la sesión
@@ -83,6 +96,7 @@ namespace PhoneStore_Website.Controllers
 
 
         [HttpGet]
+        [Authorize]
         public IActionResult Carrito()
         {
             var carritoJson = HttpContext.Session.GetString("Carrito");
@@ -97,8 +111,16 @@ namespace PhoneStore_Website.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> RealizarCompra(int Pay_Type, string Card_Num)
         {
+
+            if (!ValidarNumeroTarjeta(Card_Num))
+            {
+                TempData["Error"] = "El número de tarjeta no es válido. Debe tener el formato ####-####-####-####.";
+                return RedirectToAction("Carrito");
+            }
+
             var carritoJson = HttpContext.Session.GetString("Carrito");
             if (string.IsNullOrEmpty(carritoJson))
             {
@@ -126,20 +148,21 @@ namespace PhoneStore_Website.Controllers
                 return RedirectToAction("Login", "Login");
             }
 
-            Pay_Type = 1; // Asignar un valor por defecto si no se proporciona uno válido
-
             var venta = new Venta
             {
                 Client_Id = cliente.Client_Id,
                 Id_Empleado = null,
                 Sale_Status = 1,
                 Pay_Type = Pay_Type,
-                Card_Num = Card_Num,
+                Card_Num = Card_Num ?? "",
                 Pay_Amount = carrito.Sum(i => i.Subtotal),
                 Total_Amount = carrito.Sum(i => i.Subtotal),
                 Change_Amount = 0,
                 Det_Ventas = new List<Det_Venta>()
             };
+
+            _context.Ventas.Add(venta);
+            await _context.SaveChangesAsync(); // Para obtener Sale_Id
 
             foreach (var item in carrito)
             {
@@ -153,7 +176,7 @@ namespace PhoneStore_Website.Controllers
                 });
             }
 
-            _context.Ventas.Add(venta);
+            _context.Update(venta);
             await _context.SaveChangesAsync();
 
             HttpContext.Session.Remove("Carrito");
