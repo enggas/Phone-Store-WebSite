@@ -57,7 +57,7 @@ namespace PhoneStore_Website.Controllers
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Cliente_Index", "Cliente");
 
         }
 

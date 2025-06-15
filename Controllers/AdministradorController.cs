@@ -77,6 +77,11 @@ namespace PhoneStore_Website.Controllers
                 return View(empleado);
             }
 
+            if (!ValidarCedula(empleado.Cedula))
+            {
+                ModelState.AddModelError("Cedula", "La cédula debe tener el formato 000-000000-0000X.");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Empleado.Add(empleado);
@@ -124,7 +129,6 @@ namespace PhoneStore_Website.Controllers
             }
 
             // Actualizar propiedades
-            empleadoExistente.Cedula = empleado.Cedula;
             empleadoExistente.Employee_Fullname = empleado.Employee_Fullname;
             empleadoExistente.Gmail = empleado.Gmail;
             empleadoExistente.Pssword = empleado.Pssword;

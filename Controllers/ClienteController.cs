@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 using PhoneStore_Website.Data;
 using PhoneStore_Website.Models;
+using PhoneStore_Website.Models.ViewModels.Cliente;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace PhoneStore_Website.Controllers
 {
@@ -20,7 +21,13 @@ namespace PhoneStore_Website.Controllers
         [HttpGet]
         public ActionResult Cliente_Index()
         {
-            return View();
+            var model = new ClienteIndexViewModel
+            {
+                Productos = new List<Producto>(), // O carga tus productos aquí
+                Marcas = new List<Marca>()        // O carga tus marcas aquí
+            };
+            return View(model);
+
         }
 
         public IActionResult AgregarAlCarrito(int productoId, int cantidad)

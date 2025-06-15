@@ -3,7 +3,7 @@
 @using PhoneStore_Website.Models
 
 @{
-    ViewData["Title"] = "Phone Store - Tienda de Celulares";
+    ViewData["Title"] = "Cliente Index";
 }
 
 @section Styles {
@@ -168,7 +168,7 @@
                         <label class="form-label">Marca</label>
                         <select class="form-select" name="selectedMarcaId">
                             <option value="">Todas</option>
-                            @if (Model.Marcas != null)
+                            @if (Model?.Marcas != null)
                             {
                                 @foreach (var marca in Model.Marcas)
                                 {
