@@ -1,5 +1,163 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model PhoneStore_Website.Models.Empleado
+
 @{
+    ViewData["Title"] = "Desactivar Empleado";
 }
+
+<style>
+    :root {
+        --primary-color: #005f6b;
+        --primary-dark: #003d44;
+        --primary-light: #008c9e;
+        --secondary-color: #ff6b6b;
+        --secondary-dark: #ff5252;
+        --light-bg: #f8f9fa;
+        --dark-text: #2d3436;
+        --light-text: #f5f6fa;
+        --gray-text: #636e72;
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    body {
+        background-color: var(--light-bg);
+        font-family: 'Segoe UI', sans-serif;
+        padding: 2rem;
+    }
+
+    .form-container {
+        background-color: white;
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: auto;
+    }
+
+    h2 {
+        color: var(--primary-dark);
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    label {
+        font-weight: 600;
+        color: var(--primary-dark);
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid var(--primary-light);
+        margin-bottom: 1.2rem;
+    }
+
+    .btn-submit {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        padding: 10px 25px;
+        transition: var(--transition);
+    }
+
+        .btn-submit:hover {
+            background-color: var(--primary-dark);
+        }
+
+    .btn-cancel {
+        background-color: #ced4da;
+        color: black;
+        border-radius: 25px;
+        padding: 10px 25px;
+        transition: var(--transition);
+    }
+
+        .btn-cancel:hover {
+            background-color: #adb5bd;
+        }
+
+    .btn-danger {
+        background-color: var(--secondary-color);
+        color: white;
+        border-radius: 25px;
+        padding: 10px 25px;
+        transition: var(--transition);
+        border: none;
+    }
+
+        .btn-danger:hover {
+            background-color: var(--secondary-dark);
+        }
+
+    .alert {
+        max-width: 600px;
+        margin: 10px auto;
+    }
+</style>
+
+
+
+<div class="container mt-5 mb-5">
+    <h2 class="text-center mb-4">Desactivar Empleado</h2>
+
+    @if (TempData["MensajeError"] != null)
+    {
+        <div class="alert alert-danger">@TempData["MensajeError"]</div>
+    }
+
+    @if (TempData["MensajeExito"] != null)
+    {
+        <div class="alert alert-success">@TempData["MensajeExito"]</div>
+    }
+
+    <!-- Barra de búsqueda por ID -->
+    <form asp-action="BuscarEmpleadoParaDesactivar" method="post" class="mb-4">
+        <div class="input-group">
+            <input type="number" name="id" class="form-control" placeholder="Ingrese ID del empleado" required />
+            <button class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
+
+    @if (Model != null && Model.Id_Empleado != 0)
+    {
+        <div class="card shadow-sm p-4 bg-light">
+            <h5 class="mb-3">Información del Empleado</h5>
+
+            <div class="mb-3">
+                <label class="form-label">ID</label>
+                <input class="form-control" value="@Model.Id_Empleado" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input class="form-control" value="@Model.Employee_Fullname" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Cédula</label>
+                <input class="form-control" value="@Model.Cedula" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Gmail</label>
+                <input class="form-control" value="@Model.Gmail" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Rol</label>
+                <input class="form-control" value="@(Model.Role_Id == 1 ? "Administrador" : Model.Role_Id == 2 ? "Encargado de Ventas" : "Encargado de Compras")" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Estado</label>
+                <input class="form-control" value="@(Model.User_State ? "Activo" : "Inactivo")" readonly />
+            </div>
+
+            <form asp-action="ConfirmarDesactivacion" method="post" class="d-flex justify-content-between mt-4">
+                <input type="hidden" name="id" value="@Model.Id_Empleado" />
+                <a asp-action="Admin_Index" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-danger">Confirmar Desactivación</button>
+            </form>
+        </div>
+    }
+</div>
+

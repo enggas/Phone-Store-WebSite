@@ -1,5 +1,87 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model PhoneStore_Website.Models.Empleado
+
 @{
+    ViewData["Title"] = "Editar Empleado";
 }
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container mt-5 mb-5">
+    <h2 class="text-center mb-4">Editar Empleado</h2>
+
+    @if (TempData["MensajeError"] != null)
+    {
+        <div class="alert alert-danger">@TempData["MensajeError"]</div>
+    }
+
+    @if (TempData["MensajeExito"] != null)
+    {
+        <div class="alert alert-success">@TempData["MensajeExito"]</div>
+    }
+
+    <!-- Barra de búsqueda -->
+    <form asp-action="BuscarEmpleadoPorId" method="post" class="mb-4">
+        <div class="input-group">
+            <input type="number" name="id" class="form-control" placeholder="Ingrese ID del empleado" required />
+            <button class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
+
+    @if (Model != null && Model.Id_Empleado != 0)
+    {
+        <form asp-action="EditarEmpleado" method="post" class="border p-4 rounded shadow-sm bg-light">
+            <input type="hidden" asp-for="Id_Empleado" />
+
+            <div class="mb-3">
+                <label asp-for="Cedula" class="form-label">Cédula</label>
+                <input asp-for="Cedula" class="form-control" />
+                <span asp-validation-for="Cedula" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Employee_Fullname" class="form-label">Nombre Completo</label>
+                <input asp-for="Employee_Fullname" class="form-control" />
+                <span asp-validation-for="Employee_Fullname" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Gmail" class="form-label">Gmail</label>
+                <input asp-for="Gmail" class="form-control" />
+                <span asp-validation-for="Gmail" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Pssword" class="form-label">Contraseña</label>
+                <input asp-for="Pssword" type="password" class="form-control" />
+                <span asp-validation-for="Pssword" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Role_Id" class="form-label">Rol</label>
+                <select asp-for="Role_Id" class="form-select">
+                    <option value="1" selected="@(Model.Role_Id == 1)">Administrador</option>
+                    <option value="2" selected="@(Model.Role_Id == 2)">Encargado de Ventas</option>
+                    <option value="3" selected="@(Model.Role_Id == 3)">Encargado de Compras</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="User_State" class="form-label">Estado</label>
+                <select asp-for="User_State" class="form-select">
+                    <option value="true" selected="@(Model.User_State)">Activo</option>
+                    <option value="false" selected="@(Model.User_State == false)">Inactivo</option>
+                </select>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a asp-action="Admin_Index" class="btn btn-secondary px-4">Cancelar</a>
+                <button type="submit" class="btn btn-success px-4">Guardar Cambios</button>
+            </div>
+        </form>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
