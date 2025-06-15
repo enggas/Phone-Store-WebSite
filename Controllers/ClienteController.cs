@@ -204,17 +204,17 @@ namespace PhoneStore_Website.Controllers
 
             var facturaVM = new FacturaViewModel
             {
-                VentaId = venta.Sale_Id,
+                IdVenta = venta.Sale_Id,
                 ClienteNombre = venta.Cliente.Client_Fullname,
-                Fecha = DateTime.Now, 
+                FechaVenta = DateTime.Now, 
                 MetodoPago = venta.Id_Tipo_Pago == 1 ? "Tarjeta" : "Efectivo", // Cambia según tu lógica
-                NumeroTarjeta = venta.Card_Num,
+                Card_Num = venta.Card_Num,
                 Total = venta.Total_Amount,
-                Items = venta.Det_Venta.Select(d => new DetalleFacturaItem
+                Detalles = venta.Det_Venta.Select(d => new DetalleFacturaViewModel
                 {
-                    ProductoNombre = d.Producto.Prod_Name,
+                    NombreProducto = d.Producto.Prod_Name,
                     Cantidad = d.Quantity,
-                    PrecioUnitario = d.Sale_Price,
+                    Precio = d.Sale_Price,
                     Subtotal = d.Subtotal
                 }).ToList()
             };
