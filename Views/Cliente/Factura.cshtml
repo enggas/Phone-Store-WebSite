@@ -1,0 +1,104 @@
+﻿@model PhoneStore_Website.Models.ViewModels.Cliente.FacturaViewModel
+
+@{
+    ViewData["Title"] = "Factura de Compra";
+}
+
+@section Styles {
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .store-header {
+            background-color: #006d77;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .factura-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .factura-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+            .factura-header h2 {
+                color: #006d77;
+            }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .btn-volver {
+            background-color: #006d77;
+            border: none;
+        }
+
+            .btn-volver:hover {
+                background-color: #00565f;
+            }
+    </style>
+}
+
+<div class="store-header">
+    <h1>Phone Store</h1>
+    <p class="mb-0">¡Gracias por tu compra!</p>
+</div>
+
+<div class="factura-container">
+    <div class="factura-header">
+        <h2>Factura de Compra</h2>
+        <p><strong>Cliente:</strong> @Model.ClienteNombre</p>
+        <p><strong>Fecha:</strong> @Model.FechaVenta.ToString("dd/MM/yyyy HH:mm")</p>
+        <p><strong>Método de Pago:</strong> @Model.MetodoPago</p>
+        @if (!string.IsNullOrEmpty(Model.Card_Num))
+        {
+            <p><strong>Tarjeta:</strong> ****-****-****-@Model.Card_Num[^4..]</p>
+        }
+    </div>
+
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Producto</th>
+                <th>Precio Unitario</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Detalles)
+            {
+                <tr>
+                    <td>@item.NombreProducto</td>
+                    <td>@item.Precio.ToString("C")</td>
+                    <td>@item.Cantidad</td>
+                    <td>@item.Subtotal.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                <td><strong>@Model.Total.ToString("C")</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="text-center mt-4">
+        <a asp-action="Cliente_Index" asp-controller="Cliente" class="btn btn-volver btn-primary">
+            <i class="fas fa-arrow-left me-2"></i> Volver a la tienda
+        </a>
+    </div>
+</div>

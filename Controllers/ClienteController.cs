@@ -184,11 +184,43 @@ namespace PhoneStore_Website.Controllers
             // 4. Limpia el carrito
             HttpContext.Session.Remove("Carrito");
             TempData["Exito"] = "¡Compra realizada con éxito!";
-            return RedirectToAction("HistorialCompras");
+            return RedirectToAction("Factura", new {id=venta.Sale_Id});
 
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Factura(int id)
+        {
+            var venta = await _context.Venta
+                .Include(v => v.Cliente)
+                .Include(v => v.Det_Venta)
+                .ThenInclude(d => d.Producto)
+                .FirstOrDefaultAsync(v => v.Sale_Id == id);
 
+            if (venta == null)
+            {
+                return NotFound();
+            }
+
+            var facturaVM = new FacturaViewModel
+            {
+                VentaId = venta.Sale_Id,
+                ClienteNombre = venta.Cliente.Client_Fullname,
+                Fecha = DateTime.Now, 
+                MetodoPago = venta.Id_Tipo_Pago == 1 ? "Tarjeta" : "Efectivo", // Cambia según tu lógica
+                NumeroTarjeta = venta.Card_Num,
+                Total = venta.Total_Amount,
+                Items = venta.Det_Venta.Select(d => new DetalleFacturaItem
+                {
+                    ProductoNombre = d.Producto.Prod_Name,
+                    Cantidad = d.Quantity,
+                    PrecioUnitario = d.Sale_Price,
+                    Subtotal = d.Subtotal
+                }).ToList()
+            };
+
+            return View(facturaVM);
+        }
 
 
 
