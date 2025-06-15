@@ -149,6 +149,7 @@ namespace PhoneStore_Website.Controllers
                 return NotFound();
             }
 
+            // 1. Crea la venta y asigna sus propiedades
             var venta = new Venta
             {
                 Client_Id = cliente.Client_Id,
@@ -159,30 +160,32 @@ namespace PhoneStore_Website.Controllers
                 Pay_Amount = carrito.Sum(i => i.Subtotal),
                 Total_Amount = carrito.Sum(i => i.Subtotal),
                 Change_Amount = 0,
-                Det_Venta = new List<Det_Venta>()
+                Det_Venta = new List<Det_Venta>() // Se crea vacía pero la llenamos justo abajo
             };
 
-            _context.Venta.Add(venta);
-            await _context.SaveChangesAsync(); // Para obtener Sale_Id
-
+            // 2. Agrega los detalles de la venta
             foreach (var item in carrito)
             {
                 venta.Det_Venta.Add(new Det_Venta
                 {
+                    Sale_Id = venta.Sale_Id,
                     Prod_Id = item.Prod_Id,
                     Quantity = item.Cantidad,
                     Sale_Price = item.Precio,
-                    Subtotal = item.Subtotal,
-                    Sale_Id = venta.Sale_Id
+                    Subtotal = item.Subtotal
+                    // Sale_Id no es necesario aquí, EF lo resuelve automáticamente
                 });
             }
 
-            _context.Update(venta);
+            // 3. Guarda TODO de una sola vez
+            _context.Venta.Add(venta);
             await _context.SaveChangesAsync();
 
+            // 4. Limpia el carrito
             HttpContext.Session.Remove("Carrito");
             TempData["Exito"] = "¡Compra realizada con éxito!";
             return RedirectToAction("HistorialCompras");
+
         }
 
 
