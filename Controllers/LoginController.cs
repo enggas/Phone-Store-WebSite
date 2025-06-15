@@ -31,7 +31,7 @@ namespace PhoneStore_Website.Controllers
         {
             if (string.IsNullOrWhiteSpace(Gmail) || string.IsNullOrWhiteSpace(Pssword))
             {
-                ModelState.AddModelError("", "El nombre de usuario y la contraseña son obligatorios.");
+                ModelState.AddModelError("", "El Correo Electronico y la Contraseña son obligatorios.");
                 return View();
             }
 
@@ -60,6 +60,7 @@ namespace PhoneStore_Website.Controllers
             return RedirectToAction("Index", "Home");
 
         }
+
 
         public IActionResult Logout()
         {

@@ -109,8 +109,6 @@ namespace PhoneStore_Website.Controllers
                 Det_Ventas = new List<Det_Venta>()
             };
 
-            // Sucursal por defecto
-            int sucursalPredeterminada = 1;
 
             // Agregar productos al detalle de venta
             foreach (var item in carrito)
@@ -121,7 +119,6 @@ namespace PhoneStore_Website.Controllers
                     Quantity = item.Cantidad,
                     Sale_Price = item.Precio,
                     Subtotal = item.Subtotal,
-                    Sucursal_Id = sucursalPredeterminada,
                     Sale_Id = venta.Sale_Id
                 });
             }

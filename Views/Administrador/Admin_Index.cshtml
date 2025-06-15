@@ -1,5 +1,78 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model IEnumerable<PhoneStore_Website.Models.Empleado>
+@{ 
+    ViewData["Title"] = "Admin_Index";
 }
+
+<div class="container-fluid">
+    <!-- Encabezado -->
+    <div class="row bg-dark text-white p-3">
+        <div class="col-md-6">
+            <h2>Phone Store</h2>
+        </div>
+        <div class="col-md-6 text-end">
+            <a href="#" class="text-white me-3">Historial de Actividades</a>
+            <a href="#" class="text-white">Cerrar Sesión</a>
+        </div>
+    </div>
+
+    <!-- Cuerpo -->
+    <div class="row" style="min-height: 90vh;">
+        <!-- Menú lateral -->
+        <div class="col-md-2 bg-dark text-white p-3">
+            <div class="mb-4">
+                <div class="fw-bold">Logo del Negocio</div>
+            </div>
+
+            <div class="mb-2 fw-bold">Reportes</div>
+            <ul class="list-unstyled">
+                <li><a href="#" class="btn btn-info btn-sm w-100 mb-1">Generar</a></li>
+                <li><a href="#" class="btn btn-info btn-sm w-100">Consultar</a></li>
+            </ul>
+        </div>
+
+        <!-- Área principal -->
+        <div class="col-md-10 p-4">
+            <!-- Barra de búsqueda -->
+            <div class="input-group mb-4">
+                <input type="text" class="form-control" placeholder="Barra de Búsqueda" />
+                <button class="btn btn-dark"><i class="bi bi-search"></i></button>
+            </div>
+
+            <!-- Tabla de empleados -->
+            <table class="table table-bordered table-striped text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID_Empleado</th>
+                        <th>Cédula</th>
+                        <th>Nombre Empleado</th>
+                        <th>Gmail</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var empleado in Model)
+                    {
+                        <tr>
+                            <td>@empleado.Id_Empleado</td>
+                            <td>@empleado.Cedula</td>
+                            <td>@empleado.Employee_Fullname</td>
+                            <td>@empleado.Gmail</td>
+                            <td>@empleado.Role_Id</td>
+                            <td>@empleado.User_State</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <!-- Botones de acción -->
+            <div class="d-flex justify-content-center gap-3 mt-4">
+                <a href="@Url.Action("Create", "Empleados")" class="btn btn-info">Agregar Empleado</a>
+                <a href="@Url.Action("Edit", "Empleados")" class="btn btn-info">Editar Empleado</a>
+                <a href="@Url.Action("Deactivate", "Empleados")" class="btn btn-info">Desactivar Empleado</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" rel="stylesheet" />

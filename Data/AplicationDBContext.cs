@@ -16,7 +16,6 @@ namespace PhoneStore_Website.Data
         }
         //Aqui Se Agregan todos los modelos(las tablas de las base de datos)
         public DbSet<Proveedores> Proveedores { get; set; }
-        public DbSet<Sucursal> Sucursales { get; set; }
         public DbSet<Cliente> Cliente { get; set; }
         public DbSet<Empleado> Empleado { get; set; }
         public DbSet<Marca> Marca { get; set; }

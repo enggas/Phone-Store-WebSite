@@ -31,11 +31,6 @@ namespace PhoneStore_Website.Models
         public required int Role_Id { get; set; }
 
 
-        [ForeignKey("Id_Sucursal")]
-        public required int Sucursal_Id { get; set; }
-        public Sucursal Sucursal { get; set; } = null!;
-
-
         [Required(ErrorMessage = "El Estado del Empleado es Requerido")]
         public required bool User_State { get; set; }
 
