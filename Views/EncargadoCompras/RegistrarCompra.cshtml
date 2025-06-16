@@ -4,13 +4,17 @@
     ViewData["Title"] = "Registrar Compra";
 }
 
-<h2>Registrar Compra</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Registrar Compra</h2>
+    <a asp-action="Purchase_Index" class="btn btn-dark btn-lg" title="Volver al menú principal">
+        <i class="bi bi-arrow-left me-1"></i> Volver
+    </a>
+</div>
 
 <form asp-action="RegistrarCompra" method="post" id="formCompra">
     <div class="form-group">
         <label asp-for="Prov_ID" class="control-label"></label>
         <select asp-for="Prov_ID" class="form-control" asp-items="ViewBag.Proveedores">
-            
         </select>
         <span asp-validation-for="Prov_ID" class="text-danger"></span>
     </div>
@@ -18,7 +22,6 @@
     <div class="form-group">
         <label asp-for="Id_Empleado" class="control-label"></label>
         <select asp-for="Id_Empleado" class="form-control" asp-items="ViewBag.Empleados">
-            
         </select>
         <span asp-validation-for="Id_Empleado" class="text-danger"></span>
     </div>
@@ -91,7 +94,10 @@
         <span asp-validation-for="Total" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Registrar</button>
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary">Registrar</button>
+        <a asp-action="Purchase_Index" class="btn btn-danger ms-2">Cancelar</a>
+    </div>
 </form>
 
 @section Scripts {
@@ -115,25 +121,21 @@
                     const subtotal = cantidad * precioCompra;
                     totalGeneral += subtotal;
 
-                    // Actualizar el subtotal visible
                     const tdSubtotal = document.getElementById('subtotal-' + index);
                     if (tdSubtotal) {
                         tdSubtotal.textContent = '$' + subtotal.toFixed(2);
                     }
                 });
 
-                // Actualizar el total general
                 if (totalInput) {
                     totalInput.value = totalGeneral.toFixed(2);
                 }
             }
 
-            // Actualizar cuando cambie cualquier input de cantidad
             cantidadInputs.forEach(input => {
                 input.addEventListener('input', actualizarTotales);
             });
 
-            // Inicializar totales al cargar la página
             actualizarTotales();
         });
     </script>
