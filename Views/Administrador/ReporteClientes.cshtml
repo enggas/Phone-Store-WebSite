@@ -1,0 +1,95 @@
+﻿@model IEnumerable<PhoneStore_Website.Models.Cliente>
+
+@{
+    ViewData["Title"] = "Reporte de Clientes";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .navbar-custom {
+        background-color: #343a40;
+    }
+
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: white;
+        }
+
+            .navbar-custom .nav-link:hover {
+                color: #ffc107;
+            }
+
+    .container-custom {
+        max-width: 1000px;
+        margin: 30px auto;
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        color: #343a40;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .table th {
+        background-color: #343a40;
+        color: white;
+    }
+
+    .back-button {
+        margin-top: 20px;
+    }
+</style>
+
+<!-- Navbar de navegación -->
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+    <div class="container-fluid">
+        <a class="navbar-brand" asp-controller="Administrador" asp-action="Admin_Index">← Menú del Administrador</a>
+    </div>
+</nav>
+
+<!-- Contenido principal -->
+<div class="container-custom">
+    <h2>📋 Reporte de Clientes</h2>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cédula</th>
+                <th>Nombre Completo</th>
+                <th>Teléfono</th>
+                <th class="text-center">¿Tiene Cuenta en el Sitio?</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cliente in Model)
+            {
+                <tr>
+                    <td>@cliente.Client_Id</td>
+                    <td>@cliente.Cedula</td>
+                    <td>@cliente.Client_Fullname</td>
+                    <td>@cliente.Telephone</td>
+                    <td class="text-center">
+                        @(string.IsNullOrWhiteSpace(cliente.Gmail) ? "❌ No" : "✅ Sí")
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-center back-button">
+        <a class="btn btn-secondary px-4" asp-controller="Administrador" asp-action="Admin_Index">← Volver</a>
+    </div>
+</div>
+
+

@@ -136,7 +136,6 @@
         <a class="navbar-brand fw-bold fs-4" href="#">Phone Store</a>
 
         <div class="d-flex align-items-center ms-auto">
-            <a class="nav-link text-white me-3" asp-action="HistorialAccionesAdmin" asp-controller="Administrador">Historial de Actividades</a>
             <a class="nav-link text-white" asp-action="Index" asp-controller="Home">Cerrar Sesión</a>
         </div>
     </div>
@@ -156,9 +155,16 @@
             </a>
 
             <div class="mb-2 fw-bold">Reportes</div>
-            <ul class="list-unstyled">
-                <li><a class="btn btn-info btn-sm w-100 mb-1" asp-action="GenerarReportes" asp-controller="AdministradorController">Generar</a></li>
-                <li><a class="btn btn-info btn-sm w-100" asp-action="ConsultarReportes" asp-controller="AdministradorController">Consultar</a></li>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" asp-action="ReporteClientes" asp-controller="Administrador">Reporte de Clientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-action="ReporteVentas" asp-controller="Administrador">Reporte de Ventas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-action="ReporteCompras" asp-controller="Administrador">Reporte de Compras</a>
+                </li>
             </ul>
         </div>
 
@@ -184,6 +190,7 @@
                         <th>Gmail</th>
                         <th>Rol</th>
                         <th>Estado</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -209,8 +216,18 @@
                                     }
                                     @rol
                                 </td>
-                                <td>@empleado.User_State</td>
+                                <td>@(empleado.User_State ? "Activo" : "Inactivo")</td>
+
+                                <td>
+                                    <a asp-action="EditarEmpleado" asp-controller="Administrador" asp-route-id="@empleado.Id_Empleado" class="btn btn-sm btn-warning me-2">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a asp-action="DesactivarEmpleado" asp-controller="Administrador" asp-route-id="@empleado.Id_Empleado" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-person-dash-fill"></i>
+                                    </a>
+                                </td>
                             </tr>
+
                         }
                     }
                     else
@@ -224,12 +241,6 @@
                 </tbody>
             </table>
 
-            <!-- Botones de acción -->
-            <div class="d-flex justify-content-center gap-3 mt-4">
-                <a href="@Url.Action("CrearEmpleado", "Administrador")" class="btn btn-info">Agregar Empleado</a>
-                <a href="@Url.Action("EditarEmpleado", "Administrador")" class="btn btn-info">Editar Empleado</a>
-                <a href="@Url.Action("DesactivarEmpleado", "Administrador")" class="btn btn-info">Desactivar Empleado</a>
-            </div>
         </div>
     </div>
 </div>

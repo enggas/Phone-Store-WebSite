@@ -49,6 +49,8 @@ namespace PhoneStore_Website.Models
         [Required(ErrorMessage = "El Total a Pagar es Requerido")]
         public required decimal Total_Amount { get; set; }
 
+        public DateTime Reg_Date { get; set; }
+
 
         public ICollection<Det_Venta> Det_Venta { get; set; } = new List<Det_Venta>();
     }

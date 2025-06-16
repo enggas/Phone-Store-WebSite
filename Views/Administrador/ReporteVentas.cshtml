@@ -1,0 +1,108 @@
+﻿@model IEnumerable<PhoneStore_Website.Models.Venta>
+
+@{
+    ViewData["Title"] = "Reporte de Ventas";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .navbar {
+        background-color: #005f6b;
+        padding: 1rem 2rem;
+    }
+
+    .navbar-brand {
+        color: white;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+        .navbar-brand:hover {
+            color: #dcdcdc;
+        }
+
+    .container {
+        margin-top: 2rem;
+    }
+
+    h2 {
+        color: #005f6b;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    table {
+        width: 100%;
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+        padding: 1rem;
+        text-align: center;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    th {
+        background-color: #008c9e;
+        color: white;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+    <div class="container-fluid">
+        <a class="navbar-brand" asp-controller="Administrador" asp-action="Admin_Index">← Menú del Administrador</a>
+    </div>
+</nav>
+
+<div class="container-custom">
+    <h2>📊 Reporte de Ventas</h2>
+
+    <div class="alert alert-info" role="alert">
+        <strong>Nota:</strong> Las ventas que no posean un empleado asignado corresponden a compras realizadas por clientes a través de sus cuentas en el sitio web.
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>ID Venta</th>
+                <th>ID Cliente</th>
+                <th>Nombre Cliente</th>
+                <th>ID Empleado</th>
+                <th>Nombre Empleado</th>
+                <th>Fecha de Venta</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var venta in Model)
+            {
+                <tr>
+                    <td>@venta.Sale_Id</td>
+                    <td>@venta.Client_Id</td>
+                    <td>@venta.Cliente?.Client_Fullname ?? "Desconocido"</td>
+                    <td>@(venta.Id_Empleado.HasValue? venta.Id_Empleado.ToString() : "—")</td>
+                    <td>@(venta.Empleado != null ? venta.Empleado.Employee_Fullname : "Venta Web")</td>
+                    <td>@venta.Reg_Date.ToString("dd/MM/yyyy")</td>
+                    <td>@venta.Pay_Amount.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-center back-button">
+        <a class="btn btn-secondary px-4" asp-controller="Administrador" asp-action="Admin_Index">← Volver</a>
+    </div>
+</div>

@@ -1,0 +1,109 @@
+﻿@model List<PhoneStore_Website.Models.Compra>
+
+@{
+    ViewData["Title"] = "Reporte de Compras";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .navbar {
+        background-color: #005f6b;
+        padding: 1rem 2rem;
+    }
+
+    .navbar-brand {
+        color: white;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+        .navbar-brand:hover {
+            color: #dcdcdc;
+        }
+
+    .container {
+        margin-top: 2rem;
+    }
+
+    h2 {
+        color: #005f6b;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    table {
+        width: 100%;
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+        padding: 1rem;
+        text-align: center;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    th {
+        background-color: #008c9e;
+        color: white;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+</style>
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="@Url.Action("Admin_Index", "Administrador")">Menú Administrador</a>
+    </div>
+</nav>
+
+<div class="container">
+    <h2 class="mb-4">Reporte de Compras</h2>
+
+    <div class="alert alert-info">
+        <strong>Nota:</strong> Las compras sin empleado asignado corresponden a compras realizadas directamente por proveedores sin intervención de un empleado.
+    </div>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th>ID Compra</th>
+                <th>Proveedor</th>
+                <th>Empleado</th>
+                <th>Fecha de Compra</th>
+                <th>Estado</th>
+                <!-- Agrega más columnas si tienes otros atributos que mostrar -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var compra in Model)
+            {
+                <tr>
+
+                    <td>@compra.Purchase_Id</td>
+                    <td>@(compra.proveedores != null ? compra.proveedores.Prov_Name : "Proveedor no asignado")</td>
+                    <td>@(compra.Id_Empleado != 0 ? compra.empleado?.Employee_Fullname ?? "Sin empleado asignado" : "Sin empleado asignado")</td>
+                    <td>@($"{compra.Reg_Date:dd/MM/yyyy HH:mm}")</td>
+                    <td>@(compra.Total)</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="text-center back-button">
+    <a class="btn btn-secondary px-4" asp-controller="Administrador" asp-action="Admin_Index">← Volver</a>
+</div>

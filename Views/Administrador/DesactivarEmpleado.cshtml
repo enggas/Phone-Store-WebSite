@@ -109,14 +109,6 @@
         <div class="alert alert-success">@TempData["MensajeExito"]</div>
     }
 
-    <!-- Barra de búsqueda por ID -->
-    <form asp-action="BuscarEmpleadoParaDesactivar" method="post" class="mb-4">
-        <div class="input-group">
-            <input type="number" name="id" class="form-control" placeholder="Ingrese ID del empleado" required />
-            <button class="btn btn-primary">Buscar</button>
-        </div>
-    </form>
-
     @if (Model != null && Model.Id_Empleado != 0)
     {
         <div class="card shadow-sm p-4 bg-light">

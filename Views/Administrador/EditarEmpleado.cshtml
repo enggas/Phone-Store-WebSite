@@ -19,14 +19,6 @@
         <div class="alert alert-success">@TempData["MensajeExito"]</div>
     }
 
-    <!-- Barra de búsqueda -->
-    <form asp-action="BuscarEmpleadoPorId" method="post" class="mb-4">
-        <div class="input-group">
-            <input type="number" name="id" class="form-control" placeholder="Ingrese ID del empleado" required />
-            <button class="btn btn-primary">Buscar</button>
-        </div>
-    </form>
-
     @if (Model != null && Model.Id_Empleado != 0)
     {
         <form asp-action="EditarEmpleado" method="post" class="border p-4 rounded shadow-sm bg-light">

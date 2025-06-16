@@ -96,24 +96,19 @@ namespace PhoneStore_Website.Controllers
         [HttpGet]
         public IActionResult EditarEmpleado(int id)
         {
-            return View();
-        }
-
-
-        [HttpPost]
-        public IActionResult BuscarEmpleadoPorId(int id)
-        {
             var empleado = _context.Empleado.FirstOrDefault(e => e.Id_Empleado == id);
 
             if (empleado == null)
             {
-                TempData["MensajeError"] = "No se encontró ningún empleado con el ID especificado.";
-                return RedirectToAction("EditarEmpleado");
+                TempData["MensajeError"] = "Empleado no encontrado.";
+                return RedirectToAction("Admin_Index");
             }
 
-            return View("EditarEmpleado", empleado);
+            return View(empleado);
         }
 
+
+        
         [HttpPost]
         public IActionResult EditarEmpleado(Empleado empleado)
         {
@@ -142,25 +137,21 @@ namespace PhoneStore_Website.Controllers
         }
 
         [HttpGet]
-        public IActionResult DesactivarEmpleado()
+        public async Task<IActionResult> DesactivarEmpleado(int id)
         {
-            return View();
-        }
 
-        [HttpPost]
-        public async Task<IActionResult> BuscarEmpleadoParaDesactivar(int id)
-        {
             var empleado = await _context.Empleado.FindAsync(id);
 
             if (empleado == null)
             {
-                TempData["MensajeError"] = "No se encontró el empleado con ese ID.";
-                return RedirectToAction("DesactivarEmpleado");
+                TempData["MensajeError"] = "Empleado no encontrado.";
+                return RedirectToAction("Admin_Index");
             }
 
-            return View("DesactivarEmpleado", empleado);
-        }
+            return View(empleado);
 
+
+        }
 
         [HttpPost]
         public async Task<IActionResult> ConfirmarDesactivacion(int id)
@@ -178,6 +169,37 @@ namespace PhoneStore_Website.Controllers
             TempData["MensajeExito"] = "Empleado desactivado correctamente.";
             return RedirectToAction("Admin_Index"); // Puedes cambiar el destino
         }
+
+
+        [HttpGet]
+        public IActionResult ReporteClientes()
+        {
+            var clientes = _context.Cliente.ToList();
+            return View(clientes);
+        }
+
+        // Mostrar lista de ventas realizadas
+        [HttpGet]
+        public IActionResult ReporteVentas()
+        {
+            var ventas = _context.Venta
+                .Include(v => v.Cliente)
+                .Include(v => v.Empleado)
+                .ToList();
+            return View(ventas);
+        }
+
+        // Mostrar lista de compras realizadas
+        [HttpGet]
+        public IActionResult ReporteCompras()
+        {
+            var compras = _context.Compras
+                .Include(c => c.proveedores)
+                .Include(c => c.empleado)
+                .ToList();
+            return View(compras);
+        }
+
 
 
         // GET: AdministradorController/Details/5
