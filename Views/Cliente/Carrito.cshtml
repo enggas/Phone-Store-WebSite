@@ -18,6 +18,24 @@
         --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
+    nav.navbar {
+        background-color: var(--primary-dark);
+        padding: 10px 20px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    nav .navbar-brand {
+        font-weight: bold;
+        font-size: 1.25rem;
+        color: white;
+    }
+
+    nav a.btn-outline-light:hover {
+        background-color: var(--primary-color);
+        color: white;
+        border-color: white;
+    }
+
     th {
         background-color: #007b7b !important;
         color: white;
@@ -57,6 +75,17 @@
 </style>
 
 
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 rounded">
+    <div class="container-fluid">
+        <span class="navbar-brand">🛒 Carrito de Compras</span>
+        <div class="d-flex">
+            <a asp-action="Cliente_Index" class="btn btn-outline-light">
+                <i class="bi bi-arrow-left-circle"></i> Volver al Menú Principal
+            </a>
+        </div>
+    </div>
+</nav>
+
 <h2>Carrito de Compras</h2>
 
 @if (Model == null || !Model.Any())
@@ -80,7 +109,17 @@ else
                 <tr>
                     <td>@item.Nombre</td>
                     <td>@item.Precio.ToString("C")</td>
-                    <td>@item.Cantidad</td>
+                    <td>
+                        @item.Cantidad
+                        <form asp-action="DisminuirCantidad" method="post" style="display:inline;">
+                            <input type="hidden" name="productoId" value="@item.Prod_Id" />
+                            <button class="btn btn-sm btn-warning" title="Disminuir"><i class="bi bi-dash-circle"></i></button>
+                        </form>
+                        <form asp-action="EliminarProducto" method="post" style="display:inline;">
+                            <input type="hidden" name="productoId" value="@item.Prod_Id" />
+                            <button class="btn btn-sm btn-danger" title="Eliminar"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
                     <td>@item.Subtotal.ToString("C")</td>
                 </tr>
             }

@@ -105,6 +105,44 @@ namespace PhoneStore_Website.Controllers
             return View(carrito ?? new List<Carrito>());
         }
 
+        [HttpPost]
+        public IActionResult DisminuirCantidad(int productoId)
+        {
+            var carritoJson = HttpContext.Session.GetString("Carrito");
+            if (string.IsNullOrEmpty(carritoJson))
+                return RedirectToAction("Carrito");
+
+            var carrito = JsonSerializer.Deserialize<List<Carrito>>(carritoJson) ?? new List<Carrito>();
+            var producto = carrito.FirstOrDefault(p => p.Prod_Id == productoId);
+
+            if (producto != null)
+            {
+                producto.Cantidad--;
+                if (producto.Cantidad <= 0)
+                {
+                    carrito.Remove(producto);
+                }
+            }
+
+            HttpContext.Session.SetString("Carrito", JsonSerializer.Serialize(carrito));
+            return RedirectToAction("Carrito");
+        }
+
+        [HttpPost]
+        public IActionResult EliminarProducto(int productoId)
+        {
+            var carritoJson = HttpContext.Session.GetString("Carrito");
+            if (string.IsNullOrEmpty(carritoJson))
+                return RedirectToAction("Carrito");
+
+            var carrito = JsonSerializer.Deserialize<List<Carrito>>(carritoJson) ?? new List<Carrito>();
+            carrito.RemoveAll(p => p.Prod_Id == productoId);
+
+            HttpContext.Session.SetString("Carrito", JsonSerializer.Serialize(carrito));
+            return RedirectToAction("Carrito");
+        }
+
+
 
 
         [HttpPost]

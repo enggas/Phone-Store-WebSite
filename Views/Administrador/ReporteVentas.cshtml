@@ -92,7 +92,7 @@
                 <tr>
                     <td>@venta.Sale_Id</td>
                     <td>@venta.Client_Id</td>
-                    <td>@venta.Cliente?.Client_Fullname ?? "Desconocido"</td>
+                    <td>@venta.Cliente?.Client_Fullname</td>
                     <td>@(venta.Id_Empleado.HasValue? venta.Id_Empleado.ToString() : "—")</td>
                     <td>@(venta.Empleado != null ? venta.Empleado.Employee_Fullname : "Venta Web")</td>
                     <td>@venta.Reg_Date.ToString("dd/MM/yyyy")</td>

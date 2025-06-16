@@ -93,7 +93,26 @@
             color: red;
             font-size: 14px;
         }
-    </style>
+
+    .btn-volver {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        color: #08515E;
+        background-color: transparent;
+        border: 2px solid #08515E;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-weight: bold;
+    }
+
+    .btn-volver:hover {
+        background-color: #08515E;
+        color: white;
+    }
+
+</style>
 </head>
 <body>
     <div class="login-container">
@@ -128,6 +147,10 @@
         {
             <div class="error-message">@ViewBag.Error</div>
         }
+
+        <a href="@Url.Action("Index", "Home")" class="btn-volver">
+    ←       Volver al menú principal
+        </a>
     </div>
 
     <!-- Scripts de validación obligatorios -->
