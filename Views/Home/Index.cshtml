@@ -800,8 +800,10 @@
             <div class="row align-items-center">
                 <div class="col-lg-6 hero-left">
                     <h2>Somos Phone Store</h2>
-                    <p>Poseemos a los mejores pintas de Ciudad Sandino para que te consigan el celular de tu preferencia</p>
-                    <button class="hero-btn">Ver Ofertas</button>
+                    <p>
+                        Tu tienda confiable para comprar celulares de última generación al mejor precio. Realiza tus compras en línea o visítanos en nuestra sucursal. ¡Tecnología al alcance de todos!
+                    </p>
+                    <button class="hero-btn" asp-action="Lista_Producto" asp-controller="Home">Ver Ofertas</button>
                 </div>
                 <div class="col-lg-6 hero-right">
                     @* Imágenes de productos *@
@@ -844,7 +846,7 @@
                                 <h5 class="card-title">@producto.Prod_Name</h5>
                                 <p class="card-description">Descripción breve del producto y sus características principales.</p>
                                 <div class="card-price">C$ @producto.Sale_Price</div>
-                                <button class="add-to-cart">Iniciar Sesion Para Activar Carrito</button>
+                               <button class="add-to-cart" >Iniciar Sesion Para Activar Carrito</button>
                             </div>
                         </div>
                     </div>
