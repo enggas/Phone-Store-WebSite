@@ -110,7 +110,6 @@ namespace PhoneStore_Website.Controllers
         [HttpPost]
         public async Task<IActionResult> RealizarCompra(int Pay_Type, string Card_Num)
         {
-
             if (!ValidarNumeroTarjeta(Card_Num))
             {
                 TempData["Error"] = "El número de tarjeta no es válido. Debe tener el formato ####-####-####-####.";
@@ -149,7 +148,7 @@ namespace PhoneStore_Website.Controllers
                 return NotFound();
             }
 
-            // 1. Crea la venta y asigna sus propiedades
+            // 1. Crea la venta
             var venta = new Venta
             {
                 Client_Id = cliente.Client_Id,
@@ -160,7 +159,7 @@ namespace PhoneStore_Website.Controllers
                 Pay_Amount = carrito.Sum(i => i.Subtotal),
                 Total_Amount = carrito.Sum(i => i.Subtotal),
                 Change_Amount = 0,
-                Det_Venta = new List<Det_Venta>() // Se crea vacía pero la llenamos justo abajo
+                Det_Venta = new List<Det_Venta>()
             };
 
             // 2. Agrega los detalles de la venta
@@ -173,18 +172,30 @@ namespace PhoneStore_Website.Controllers
                     Quantity = item.Cantidad,
                     Sale_Price = item.Precio,
                     Subtotal = item.Subtotal
-                    // Sale_Id no es necesario aquí, EF lo resuelve automáticamente
                 });
             }
 
-            // 3. Guarda TODO de una sola vez
             _context.Venta.Add(venta);
             await _context.SaveChangesAsync();
 
-            // 4. Limpia el carrito
+            // 3. Actualiza el stock de los productos vendidos
+            foreach (var item in carrito)
+            {
+                var producto = await _context.Producto.FindAsync(item.Prod_Id);
+                if (producto != null)
+                {
+                    producto.Stock -= item.Cantidad;
+                    _context.Entry(producto).State = EntityState.Modified;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            // 4. Limpia el carrito y redirige
             HttpContext.Session.Remove("Carrito");
             TempData["Exito"] = "¡Compra realizada con éxito!";
-            return RedirectToAction("Factura", new {id=venta.Sale_Id});
+            return RedirectToAction("Factura", new { id = venta.Sale_Id });
+
 
         }
 
