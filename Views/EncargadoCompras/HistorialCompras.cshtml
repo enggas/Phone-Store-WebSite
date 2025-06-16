@@ -1,6 +1,7 @@
-﻿@model IEnumerable<PhoneStore_Website.Models.Compra>
+﻿@model IEnumerable<PhoneStore_Website.Models.Det_Compra>
+
 @{
-    ViewData["Title"] = "Historial de Compras";
+    ViewData["Title"] = "Historial de Compras Detallado";
     Layout = "_Layout";
 }
 
@@ -9,7 +10,7 @@
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="mb-0">Historial de Compras</h2>
+        <h2 class="mb-0">Historial de Compras Detallado</h2>
         <a asp-action="Purchase_Index" class="btn btn-outline-secondary" title="Volver al menú principal">
             <i class="bi bi-arrow-left me-1"></i> Volver
         </a>
@@ -28,30 +29,38 @@
                 <th>Proveedor</th>
                 <th>Tipo Documento</th>
                 <th>N° Documento</th>
-                <th>Total</th>
-                <th>Fecha</th>
+                <th>Producto</th>
+                <th>Precio Compra</th>
+                <th>Precio Venta</th>
+                <th>Cantidad</th>
+                <th>Total Producto</th>
+                <th>Fecha Compra</th>
             </tr>
         </thead>
         <tbody>
             @if (Model != null && Model.Any())
             {
-                foreach (var compra in Model)
+                foreach (var detalle in Model)
                 {
                     <tr>
-                        <td>@compra.Purchase_Id</td>
-                        <td>@compra.empleado.Employee_Fullname</td>
-                        <td>@compra.proveedores.Prov_Name</td>
-                        <td>@compra.Doc_Type</td>
-                        <td>@compra.Doc_Num</td>
-                        <td>C$@compra.Total.ToString("N2")</td>
-                        <td>@compra.Reg_Date?.ToString("dd/MM/yyyy")</td>
+                        <td>@detalle.Purchase_Id</td>
+                        <td>@detalle.compra.empleado?.Employee_Fullname</td>
+                        <td>@detalle.compra.proveedores?.Prov_Name</td>
+                        <td>@detalle.compra.Doc_Type</td>
+                        <td>@detalle.compra.Doc_Num</td>
+                        <td>@detalle.producto.Prod_Name</td>
+                        <td>$@detalle.Purchase_Price.ToString("N2")</td>
+                        <td>$@detalle.Sale_Price.ToString("N2")</td>
+                        <td>@detalle.Stock</td>
+                        <td>$@detalle.Total.ToString("N2")</td>
+                        <td>@detalle.compra.Reg_Date?.ToString("dd/MM/yyyy")</td>
                     </tr>
                 }
             }
             else
             {
                 <tr>
-                    <td colspan="7">No hay compras registradas.</td>
+                    <td colspan="11">No hay detalles de compras registradas.</td>
                 </tr>
             }
         </tbody>

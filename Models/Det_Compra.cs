@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PhoneStore_Website.Models
 {
+    [Table("Det_Compra")]
     public class Det_Compra
     {
 
@@ -31,7 +32,7 @@ namespace PhoneStore_Website.Models
 
 
         [Required(ErrorMessage = "La Cantidad del Producto Comprado es Requerida")]
-        public required decimal Stock { get; set; }
+        public required int Stock { get; set; }
 
 
         [Required(ErrorMessage = "El Total de la Compra del Producto es Requerido")]

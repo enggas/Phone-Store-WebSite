@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PhoneStore_Website.Data;
 using PhoneStore_Website.Models;
+using PhoneStore_Website.ViewModels;
 using System.Security.Claims;
 
 namespace PhoneStore_Website.Controllers
@@ -29,72 +30,206 @@ namespace PhoneStore_Website.Controllers
             return View(proveedores);
         }
 
-        // 3) Ver Historial de todas las compras
-        public IActionResult HistorialCompras()
+        // GET: HistorialCompras
+        public async Task<IActionResult> HistorialCompras()
         {
+            var detallesCompras = await _context.Det_Compras
+                .Include(dc => dc.producto)
+                .Include(dc => dc.compra)
+                    .ThenInclude(c => c.empleado)
+                .Include(dc => dc.compra)
+                    .ThenInclude(c => c.proveedores)
+                .ToListAsync();
 
-            var compras = _context.Compras
-                .Include(c => c.proveedores)
-                .Include(c => c.empleado)
-                .ToList();
-
-            if (compras.Count == 0)
+            if (!detallesCompras.Any())
             {
-                ViewBag.Mensaje = "No hay compras registradas aún.";
+                ViewBag.Mensaje = "No hay detalles de compras registradas.";
             }
 
-            return View(compras);
+            return View(detallesCompras);
         }
 
-        // 4) Registrar una nueva compra
-        // GET: RegistrarCompra
+
+        // GET: Registrar nueva compra
         [HttpGet]
-        public IActionResult RegistrarCompra()
+        public async Task<IActionResult> RegistrarCompra()
         {
-            CargarDropdowns();
-            return View();
+            var proveedores = await _context.Proveedores.ToListAsync();
+
+            var proveedoresList = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "", Text = "Seleccionar un proveedor", Selected = true }
+    };
+            proveedoresList.AddRange(proveedores.Select(p => new SelectListItem
+            {
+                Value = p.Prov_Id.ToString(),
+                Text = p.Prov_Name
+            }));
+
+            var empleados = await _context.Empleado
+                                  .Where(e => e.Role_Id == 3)
+                                  .ToListAsync();
+
+            var empleadosList = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "", Text = "Seleccionar un empleado", Selected = true }
+    };
+            empleadosList.AddRange(empleados.Select(e => new SelectListItem
+            {
+                Value = e.Id_Empleado.ToString(),
+                Text = e.Employee_Fullname
+            }));
+
+            ViewBag.Proveedores = proveedoresList;
+            ViewBag.Empleados = empleadosList;
+
+            var productos = await _context.Producto.ToListAsync();
+
+            var viewModel = new RegistrarCompraViewModel
+            {
+                ProductosSeleccionados = productos.Select(p => new ProductoCompraDetalle
+                {
+                    ProductoId = p.Prod_Id,
+                    ProductoNombre = p.Prod_Name,
+                    PrecioCompra = p.Purchase_Price,
+                    PrecioVenta = p.Sale_Price,
+                    Cantidad = 0
+                }).ToList()
+            };
+
+            return View(viewModel);
         }
 
-        // POST: RegistrarCompra
+
+        // POST: Procesar registro de la compra
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult RegistrarCompra(Compra compra)
+        public async Task<IActionResult> RegistrarCompra(RegistrarCompraViewModel vm)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
+                // Recargar dropdowns con la misma lógica
+                var proveedores = await _context.Proveedores.ToListAsync();
+                var proveedoresList = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "", Text = "Seleccionar un proveedor" }
+        };
+                proveedoresList.AddRange(proveedores.Select(p => new SelectListItem
                 {
-                    if (!compra.Reg_Date.HasValue)
-                    {
-                        compra.Reg_Date = DateTime.Now;
-                    }
+                    Value = p.Prov_Id.ToString(),
+                    Text = p.Prov_Name
+                }));
 
-                    _context.Compras.Add(compra);
-                    _context.SaveChanges();
+                var empleados = await _context.Empleado
+                                      .Where(e => e.Role_Id == 3)
+                                      .ToListAsync();
 
-                    return RedirectToAction(nameof(Purchase_Index));
-                }
-                catch (Exception ex)
+                var empleadosList = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "", Text = "Seleccionar un empleado" }
+        };
+                empleadosList.AddRange(empleados.Select(e => new SelectListItem
                 {
-                    ModelState.AddModelError("", "Error al guardar la compra: " + ex.Message);
+                    Value = e.Id_Empleado.ToString(),
+                    Text = e.Employee_Fullname
+                }));
+
+                ViewBag.Proveedores = proveedoresList;
+                ViewBag.Empleados = empleadosList;
+
+                // Recargar productos en ViewModel para que la vista funcione bien
+                var productos = await _context.Producto.ToListAsync();
+                vm.ProductosSeleccionados = productos.Select(p => new ProductoCompraDetalle
+                {
+                    ProductoId = p.Prod_Id,
+                    ProductoNombre = p.Prod_Name,
+                    PrecioCompra = p.Purchase_Price,
+                    PrecioVenta = p.Sale_Price,
+                    Cantidad = vm.ProductosSeleccionados?.FirstOrDefault(x => x.ProductoId == p.Prod_Id)?.Cantidad ?? 0
+                }).ToList();
+
+                return View(vm);
+            }
+
+            // Validar al menos un producto comprado con cantidad > 0
+            var productosComprados = vm.ProductosSeleccionados.Where(p => p.Cantidad > 0).ToList();
+            if (productosComprados.Count == 0)
+            {
+                ModelState.AddModelError("", "Debe seleccionar al menos un producto con cantidad mayor a cero.");
+
+                var proveedores = await _context.Proveedores.ToListAsync();
+                var proveedoresList = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "", Text = "Seleccionar un proveedor" }
+        };
+                proveedoresList.AddRange(proveedores.Select(p => new SelectListItem
+                {
+                    Value = p.Prov_Id.ToString(),
+                    Text = p.Prov_Name
+                }));
+
+                var empleados = await _context.Empleado
+                                      .Where(e => e.Role_Id == 3)
+                                      .ToListAsync();
+
+                var empleadosList = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "", Text = "Seleccionar un empleado" }
+        };
+                empleadosList.AddRange(empleados.Select(e => new SelectListItem
+                {
+                    Value = e.Id_Empleado.ToString(),
+                    Text = e.Employee_Fullname
+                }));
+
+                ViewBag.Proveedores = proveedoresList;
+                ViewBag.Empleados = empleadosList;
+
+                return View(vm);
+            }
+
+            // Crear la compra
+            var compra = new Compra
+            {
+                Prov_ID = vm.Prov_ID,
+                Id_Empleado = vm.Id_Empleado,
+                Doc_Num = vm.Doc_Num,
+                Doc_Type = vm.Doc_Type,
+                Total = productosComprados.Sum(p => p.PrecioCompra * p.Cantidad),
+                Reg_Date = DateTime.Now,
+            };
+
+            _context.Compras.Add(compra);
+            await _context.SaveChangesAsync();
+
+            // Crear detalle compra y actualizar stock producto
+            foreach (var prod in productosComprados)
+            {
+                var detalle = new Det_Compra
+                {
+                    Purchase_Id = compra.Purchase_Id,
+                    Prod_Id = prod.ProductoId,
+                    Stock = prod.Cantidad,
+                    Purchase_Price = prod.PrecioCompra,
+                    Sale_Price = prod.PrecioVenta,
+                    Total = prod.Subtotal
+                };
+                _context.Det_Compras.Add(detalle);
+
+                // Actualizar stock producto
+                var productoDb = await _context.Producto.FindAsync(prod.ProductoId);
+                if (productoDb != null)
+                {
+                    productoDb.Stock += prod.Cantidad;
+                    _context.Producto.Update(productoDb);
                 }
             }
 
-            // Si llegamos acá, hubo error o falla de validación
-            CargarDropdowns();
-            return View(compra);
-        }
+            await _context.SaveChangesAsync();
 
-        private void CargarDropdowns()
-        {
-            var empleadosEncargados = _context.Empleado
-                .Where(e => e.Role_Id == 3)
-                .ToList();
+            TempData["SuccessMessage"] = "Compra registrada exitosamente.";
 
-            ViewBag.Empleados = new SelectList(empleadosEncargados, "Id_Empleado", "Employee_Fullname");
-
-            var proveedores = _context.Proveedores.ToList();
-            ViewBag.Proveedores = new SelectList(proveedores, "Prov_Id", "Prov_Name");
+            return RedirectToAction("Purchase_Index");
         }
 
     }

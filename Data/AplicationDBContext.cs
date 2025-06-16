@@ -37,7 +37,29 @@ namespace PhoneStore_Website.Data
                 .WithMany(m => m.Productos)
                 .HasForeignKey(p => p.Id_Marca);
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Det_Compra>()
+                .ToTable("Det_Compra");  // Ya lo tienes en el modelo, pero no está de más aquí también.
+
+            modelBuilder.Entity<Det_Compra>()
+                .HasOne(dc => dc.compra)
+                .WithMany(c => c.Det_Compras)
+                .HasForeignKey(dc => dc.Purchase_Id)
+                .OnDelete(DeleteBehavior.Restrict); // Opcional, para evitar cascadas no deseadas.
+
+            modelBuilder.Entity<Det_Compra>()
+                .HasOne(dc => dc.producto)
+                .WithMany(p => p.Det_Compras)
+                .HasForeignKey(dc => dc.Prod_Id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Aquí puedes agregar otras configuraciones que ya tengas
+
+            base.OnModelCreating(modelBuilder);
         }
+
+
+
 
 
 

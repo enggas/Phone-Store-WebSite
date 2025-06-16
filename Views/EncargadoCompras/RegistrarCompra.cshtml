@@ -1,57 +1,140 @@
-﻿@model PhoneStore_Website.Models.Compra
+﻿@model PhoneStore_Website.ViewModels.RegistrarCompraViewModel
 
 @{
     ViewData["Title"] = "Registrar Compra";
-    Layout = "_Layout";
 }
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<h2>Registrar Compra</h2>
 
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">Registrar Nueva Compra</h2>
+<form asp-action="RegistrarCompra" method="post" id="formCompra">
+    <div class="form-group">
+        <label asp-for="Prov_ID" class="control-label"></label>
+        <select asp-for="Prov_ID" class="form-control" asp-items="ViewBag.Proveedores">
+            
+        </select>
+        <span asp-validation-for="Prov_ID" class="text-danger"></span>
+    </div>
 
-    @using (Html.BeginForm("RegistrarCompra", "EncargadoCompras", FormMethod.Post))
+    <div class="form-group">
+        <label asp-for="Id_Empleado" class="control-label"></label>
+        <select asp-for="Id_Empleado" class="form-control" asp-items="ViewBag.Empleados">
+            
+        </select>
+        <span asp-validation-for="Id_Empleado" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Doc_Type"></label>
+        <input asp-for="Doc_Type" class="form-control" />
+        <span asp-validation-for="Doc_Type" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Doc_Num"></label>
+        <input asp-for="Doc_Num" class="form-control" />
+        <span asp-validation-for="Doc_Num" class="text-danger"></span>
+    </div>
+
+    <hr />
+
+    <h4>Productos</h4>
+
+    @if (Model?.ProductosSeleccionados != null && Model.ProductosSeleccionados.Any())
     {
-        @Html.AntiForgeryToken()
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio Compra</th>
+                    <th>Precio Venta</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.ProductosSeleccionados.Count; i++)
+                {
+                    <tr>
+                        <td>@Model.ProductosSeleccionados[i].ProductoNombre</td>
+                        <td>$@Model.ProductosSeleccionados[i].PrecioCompra.ToString("N2")</td>
+                        <td>$@Model.ProductosSeleccionados[i].PrecioVenta.ToString("N2")</td>
+                        <td>
+                            <input asp-for="ProductosSeleccionados[@i].Cantidad"
+                                   type="number"
+                                   class="form-control cantidad-input"
+                                   min="0"
+                                   data-preciocompra="@Model.ProductosSeleccionados[i].PrecioCompra"
+                                   data-index="@i" />
+                            <span asp-validation-for="ProductosSeleccionados[@i].Cantidad" class="text-danger"></span>
 
-        <div class="mb-3">
-            @Html.LabelFor(m => m.Prov_ID, "Proveedor", new { @class = "form-label" })
-            @Html.DropDownListFor(m => m.Prov_ID, (SelectList)ViewBag.Proveedores, "Seleccione un proveedor", new { @class = "form-select" })
-            @Html.ValidationMessageFor(m => m.Prov_ID, "", new { @class = "text-danger" })
-        </div>
-
-        <div class="mb-3">
-            @Html.LabelFor(m => m.Id_Empleado, "Empleado Encargado", new { @class = "form-label" })
-            @Html.DropDownListFor(m => m.Id_Empleado, (SelectList)ViewBag.Empleados, "Seleccione un empleado", new { @class = "form-select" })
-            @Html.ValidationMessageFor(m => m.Id_Empleado, "", new { @class = "text-danger" })
-        </div>
-
-        <div class="mb-3">
-            @Html.LabelFor(m => m.Doc_Type, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.Doc_Type, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Doc_Type, "", new { @class = "text-danger" })
-        </div>
-
-        <div class="mb-3">
-            @Html.LabelFor(m => m.Doc_Num, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.Doc_Num, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Doc_Num, "", new { @class = "text-danger" })
-        </div>
-
-        <div class="mb-3">
-            @Html.LabelFor(m => m.Total, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.Total, new { @class = "form-control", type = "number", step = "0.01" })
-            @Html.ValidationMessageFor(m => m.Total, "", new { @class = "text-danger" })
-        </div>
-
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary">Registrar Compra</button>
-            <a asp-action="Purchase_Index" class="btn btn-secondary ms-2">Cancelar</a>
-        </div>
+                            <input type="hidden" asp-for="ProductosSeleccionados[@i].ProductoId" />
+                            <input type="hidden" asp-for="ProductosSeleccionados[@i].ProductoNombre" />
+                            <input type="hidden" asp-for="ProductosSeleccionados[@i].PrecioCompra" />
+                            <input type="hidden" asp-for="ProductosSeleccionados[@i].PrecioVenta" />
+                        </td>
+                        <td id="subtotal-@i">
+                            $@(Model.ProductosSeleccionados[i].Subtotal.ToString("N2"))
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     }
-</div>
+    else
+    {
+        <p>No hay productos disponibles.</p>
+    }
+
+    <div class="form-group">
+        <label asp-for="Total"></label>
+        <input asp-for="Total" class="form-control" readonly id="totalCompra" />
+        <span asp-validation-for="Total" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Registrar</button>
+</form>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cantidadInputs = document.querySelectorAll('.cantidad-input');
+            const totalInput = document.getElementById('totalCompra');
+
+            function actualizarTotales() {
+                let totalGeneral = 0;
+
+                cantidadInputs.forEach(input => {
+                    const cantidad = parseInt(input.value) || 0;
+                    const precioCompra = parseFloat(input.dataset.preciocompra) || 0;
+                    const index = input.dataset.index;
+
+                    const subtotal = cantidad * precioCompra;
+                    totalGeneral += subtotal;
+
+                    // Actualizar el subtotal visible
+                    const tdSubtotal = document.getElementById('subtotal-' + index);
+                    if (tdSubtotal) {
+                        tdSubtotal.textContent = '$' + subtotal.toFixed(2);
+                    }
+                });
+
+                // Actualizar el total general
+                if (totalInput) {
+                    totalInput.value = totalGeneral.toFixed(2);
+                }
+            }
+
+            // Actualizar cuando cambie cualquier input de cantidad
+            cantidadInputs.forEach(input => {
+                input.addEventListener('input', actualizarTotales);
+            });
+
+            // Inicializar totales al cargar la página
+            actualizarTotales();
+        });
+    </script>
 }
