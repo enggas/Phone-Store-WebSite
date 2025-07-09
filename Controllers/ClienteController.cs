@@ -30,13 +30,48 @@ namespace PhoneStore_Website.Controllers
         }
 
         [HttpGet]
-        public ActionResult Cliente_Index(string search)
+        public ActionResult Cliente_Index(string search, int? selectedMarcaId, string RangoPrecio)
         {
 
 
-            var productos = _context.Producto
-            .Where(p => p.Prod_State && (string.IsNullOrEmpty(search) || p.Prod_Name.Contains(search)))
-            .ToList();
+            var productosQuery = _context.Producto
+            .Where(p => p.Prod_State) // Solo productos activos
+            .AsQueryable();
+
+            // Filtro de búsqueda por nombre
+            if (!string.IsNullOrEmpty(search))
+            {
+                productosQuery = productosQuery.Where(p => p.Prod_Name.Contains(search));
+            }
+
+
+            // Filtro por marca
+            if (selectedMarcaId.HasValue)
+            {
+                productosQuery = productosQuery.Where(p => p.Id_Marca == selectedMarcaId.Value);
+            }
+
+            // Filtro por rango de precio
+            if (!string.IsNullOrEmpty(RangoPrecio))
+            {
+                switch (RangoPrecio)
+                {
+                    case "0-200":
+                        productosQuery = productosQuery.Where(p => p.Sale_Price < 200);
+                        break;
+                    case "200-500":
+                        productosQuery = productosQuery.Where(p => p.Sale_Price >= 200 && p.Sale_Price <= 500);
+                        break;
+                    case "500-1000":
+                        productosQuery = productosQuery.Where(p => p.Sale_Price >= 500 && p.Sale_Price <= 1000);
+                        break;
+                    case "1000":
+                        productosQuery = productosQuery.Where(p => p.Sale_Price > 1000);
+                        break;
+                }
+            }
+
+            var productos = productosQuery.ToList();
 
             var marcas = _context.Set<Marca>()
                 .Where(m => m.Marca_State)
@@ -49,6 +84,7 @@ namespace PhoneStore_Website.Controllers
             };
 
             return View(model);
+
 
         }
 

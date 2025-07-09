@@ -119,11 +119,6 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-list me-2"></i>Categorías
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" asp-action="Carrito" asp-asp-controller="Cliente">
                             <i class="fas fa-shopping-cart me-2"></i>Carrito
                             @{
@@ -156,15 +151,6 @@
                     <i class="fas fa-filter me-2"></i>Filtrar por
                 </h6>
                 <form asp-action="Cliente_Index" method="get" class="px-3">
-                    <div class="mb-3">
-                        <label class="form-label">Dispositivo</label>
-                        <select class="form-select" name="tipoDispositivo">
-                            <option value="">Todos</option>
-                            <option value="smartphone">Smartphones</option>
-                            <option value="tablet">Tablets</option>
-                            <option value="accesorio">Accesorios</option>
-                        </select>
-                    </div>
                     <div class="mb-3">
                         <label class="form-label">Marca</label>
                         <select class="form-select" name="selectedMarcaId">
@@ -207,8 +193,6 @@
                             <button type="submit"><i class="fas fa-search search-icon"></i></button>  
                         </form>  
                     </div>  
-
-                    ...
                 </div>
             </div>
 
