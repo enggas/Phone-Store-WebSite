@@ -1,0 +1,125 @@
+﻿@model IEnumerable<Carrito>
+
+@{
+	ViewData["Title"] = "Carrito";
+}
+
+@section Styles {
+	<style>
+
+		.container-cart {
+			display: flex;
+			min-height: 90vh;
+		}
+
+		.cart-icon {
+			background: #0f5c63;
+			width: 220px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			color: white;
+			font-size: 120px;
+		}
+
+		.cart-content {
+			flex: 1;
+			background: #e9ecef;
+			padding: 60px;
+		}
+
+		.table-cart th {
+			background: #0f5c63;
+			color: white;
+			text-align: center;
+		}
+
+		.table-cart td {
+			background: #58c4c7;
+			text-align: center;
+		}
+
+		.card-input {
+			background: #0f5c63;
+			color: white;
+			padding: 15px;
+			border-radius: 10px;
+			text-align: center;
+			margin-top: 40px;
+		}
+
+		.btn-confirm {
+			background: #58c4c7;
+			border: none;
+			padding: 15px 40px;
+			border-radius: 25px;
+			margin-top: 40px;
+		}
+
+	</style>
+}
+
+<div class="container-cart">
+
+	<div class="cart-icon">
+		<i class="fa fa-shopping-cart"></i>
+	</div>
+
+	<div class="cart-content">
+
+		<table class="table table-cart">
+
+			<thead>
+
+				<tr>
+					<th>Prod_Id</th>
+					<th>Nombre Producto</th>
+					<th>Precio</th>
+					<th>Cantidad</th>
+					<th>Subtotal</th>
+				</tr>
+
+			</thead>
+
+			<tbody>
+
+				@foreach (var item in Model)
+				{
+
+					<tr>
+
+						<td>@item.Prod_Id</td>
+						<td>@item.Nombre</td>
+						<td>@item.Precio</td>
+						<td>@item.Cantidad</td>
+						<td>@item.Subtotal</td>
+
+					</tr>
+
+				}
+
+			</tbody>
+
+		</table>
+
+		<form asp-action="RealizarCompra" method="post">
+
+			<div class="card-input">
+
+				<input name="Card_Num" class="form-control" placeholder="Numero de Tarjeta" />
+
+			</div>
+
+			<div class="text-center">
+
+				<button class="btn btn-confirm">
+					Confirmar Compra
+				</button>
+
+			</div>
+
+		</form>
+
+	</div>
+
+</div>

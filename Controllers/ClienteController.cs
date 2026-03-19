@@ -233,6 +233,7 @@ namespace PhoneStore_Website.Controllers
                 Pay_Amount = carrito.Sum(i => i.Subtotal),
                 Total_Amount = carrito.Sum(i => i.Subtotal),
                 Change_Amount = 0,
+                Reg_Date = DateTime.Now,
                 Det_Venta = new List<Det_Venta>()
             };
 

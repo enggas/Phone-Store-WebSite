@@ -1,0 +1,133 @@
+﻿@model IEnumerable<PhoneStore_Website.Models.Cliente>
+
+@{
+	ViewData["Title"] = "Confirmacion";
+}
+
+@section Styles {
+	<style>
+
+		.container-main {
+			display: flex;
+			min-height: 90vh;
+		}
+
+		.sidebar {
+			background: #0f5c63;
+			width: 220px;
+			padding: 40px 20px;
+			color: white;
+		}
+
+			.sidebar a {
+				color: white;
+				font-weight: bold;
+				text-decoration: none;
+			}
+
+		.content {
+			background: #e9ecef;
+			flex: 1;
+			padding: 60px;
+		}
+
+		.form-box {
+			max-width: 700px;
+			margin: auto;
+		}
+
+		.field {
+			background: #0f8ea1;
+			padding: 18px;
+			border-radius: 15px;
+			margin-bottom: 20px;
+			color: black;
+			font-weight: bold;
+			text-align: center;
+		}
+
+		.btn-confirm {
+			background: #58c4c7;
+			border: none;
+			padding: 15px 35px;
+			border-radius: 25px;
+			margin-top: 30px;
+		}
+
+	</style>
+}
+
+<div class="container-main">
+
+	<div class="sidebar">
+
+		<a asp-action="CrearCliente">
+			Crear Cuenta Cliente
+		</a>
+
+	</div>
+
+	<div class="content">
+
+		<div class="form-box">
+
+			<select id="clienteSelect" class="form-control mb-4">
+
+				<option value="">Seleccionar Cliente</option>
+
+				@foreach (var c in Model)
+				{
+					<option value="@c.Client_Id"
+							data-nombre="@c.Client_Fullname"
+							data-cedula="@c.Cedula"
+							data-telefono="@c.Telephone"
+							data-gmail="@c.Gmail">
+
+						@c.Client_Fullname
+
+					</option>
+				}
+
+			</select>
+
+
+			<div class="field" id="nombre">Nombre Cliente</div>
+			<div class="field" id="cedula">Cedula Cliente</div>
+			<div class="field" id="telefono">Telefono Cliente</div>
+			<div class="field" id="gmail">Gmail Cliente</div>
+
+
+			<div class="text-center">
+
+				<a asp-action="Carrito" class="btn btn-confirm">
+					Confirmar Datos del Cliente
+				</a>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</div>
+
+@section Scripts {
+
+	<script>
+
+		const select = document.getElementById("clienteSelect")
+
+		select.addEventListener("change",function(){
+
+		let option = this.options[this.selectedIndex]
+
+		document.getElementById("nombre").innerText = option.dataset.nombre
+		document.getElementById("cedula").innerText = option.dataset.cedula
+		document.getElementById("telefono").innerText = option.dataset.telefono
+		document.getElementById("gmail").innerText = option.dataset.gmail
+
+		})
+
+	</script>
+
+}

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PhoneStore_Website.Data;
+using PhoneStore_Website.Models;
 
 namespace PhoneStore_Website.Controllers
 {
@@ -16,10 +17,31 @@ namespace PhoneStore_Website.Controllers
 
 
         // GET: EmpleadoVentasController
-        public ActionResult Index()
+        [HttpGet]
+        public ActionResult Sales_Index()
         {
-            return View();
+            var ventas = _context.Venta.ToList();
+            return View(ventas);
         }
+
+        [HttpPost]
+        public IActionResult Confirmacion(Cliente cliente)
+        {
+            if (!ModelState.IsValid)
+                return View(cliente);
+
+            var clienteExistente = _context.Cliente.FirstOrDefault(c => c.Client_Id == cliente.Client_Id);
+
+            if (clienteExistente == null)
+            {
+                TempData["MensajeError"] = "No se Encontro el Cliente Seleccionado";
+                return View(cliente);
+            }
+
+            return RedirectToAction("Sales_Index");
+        }
+
+
 
         // GET: EmpleadoVentasController/Details/5
         public ActionResult Details(int id)

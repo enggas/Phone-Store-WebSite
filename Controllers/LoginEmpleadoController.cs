@@ -66,7 +66,7 @@ namespace PhoneStore_Website.Controllers
                     return RedirectToAction("Admin_Index", "Administrador");
 
                 case 2: // Encargado de Compras
-                    return RedirectToAction("Dashboard", "Ventas");
+                    return RedirectToAction("Sales_Index", "EncargadoVentas");
 
                 case 3: // Encargado de Ventas
                     return RedirectToAction("Purchase_Index", "EncargadoCompras");
