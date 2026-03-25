@@ -175,8 +175,8 @@
                         <td>@venta.Sale_Id</td>
                         <td>@(venta.Empleado != null ? venta.Empleado.Employee_Fullname : "N/A")</td>
                         <td>@(venta.Cliente != null ? venta.Cliente.Client_Fullname : "N/A")</td>
-                        <td>@venta.Tipos_Pago</td>
-                        <td>@venta.Estado_Pago</td>
+                        <td>@(venta.Tipos_Pago != null? venta.Tipos_Pago.Descripcion : "N/A")</td>
+                        <td>@(venta.Estado_Pago != null? venta.Estado_Pago.Descripcion: "N/A")</td>
                         <td>@venta.Card_Num</td>
                         <td>@venta.Pay_Amount</td>
                         <td>@venta.Change_Amount</td>
@@ -185,7 +185,7 @@
 
 
                         <td>
-                            <a asp-action="DetalleVenta" asp-route-id="@venta.Sale_Id" class="btn btn-detalle">
+                            <a asp-action="Detalles_Venta" asp-route-id="@venta.Sale_Id" class="btn btn-detalle">
                                 <i class="fa fa-pen"></i>
                             </a>
                         </td>
@@ -207,14 +207,14 @@
 
     <div class="action-buttons">
 
-        <a asp-action="Confirmacion" asp-controller="EncargadoVentas" class="btn btn-main">
-            Realizar Venta
-        </a>
+        <form asp-controller="EncargadoVentas" asp-action="Confirmacion">
+            <button type="submit" class="btn btn-main">Realizar Venta</button>
+        </form>
 
-        <a asp-action="Inventario" asp-controller="EncargadoVentas" class="btn btn-main">
-            Consultar Inventario
-        </a>
-
+        <form asp-controller="EncargadoVentas" asp-action="Confirmacion">
+			<button type="submit" class="btn btn-main">Consultar Inventario</button>
+        </form>
+        
     </div>
 
 </div>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PhoneStore_Website.Data;
 using PhoneStore_Website.Models;
 
@@ -20,8 +21,15 @@ namespace PhoneStore_Website.Controllers
         [HttpGet]
         public ActionResult Sales_Index()
         {
-            var ventas = _context.Venta.ToList();
+            var ventas = _context.Venta
+            .Include(v => v.Empleado)
+            .Include(v => v.Cliente)
+            .Include(v => v.Tipos_Pago)
+            .Include(v => v.Estado_Pago)
+            .ToList();
+
             return View(ventas);
+
         }
 
         [HttpPost]

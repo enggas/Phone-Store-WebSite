@@ -22,8 +22,8 @@ namespace PhoneStore_Website.Data
         public DbSet<Producto> Producto { get; set; }
         public DbSet<Compra> Compras { get; set; }
         public DbSet<Det_Compra> Det_Compras { get; set; }
-        public DbSet<Tipos_Pago> Tipos_Pagos { get; set; }
-        public DbSet<Estado_Pago> Estado_Pagos { get; set; }
+        public DbSet<Tipos_Pago> Tipos_Pago { get; set; }
+        public DbSet<Estado_Pago> Estado_Pago { get; set; }
         public DbSet<Venta> Venta { get; set; }
         public DbSet<Det_Venta> Det_Venta { get; set; }
 
