@@ -32,23 +32,15 @@ namespace PhoneStore_Website.Controllers
 
         }
 
+
         [HttpPost]
-        public IActionResult Confirmacion(Cliente cliente)
+        public IActionResult Confirmacion()
         {
-            if (!ModelState.IsValid)
-                return View(cliente);
-
-            var clienteExistente = _context.Cliente.FirstOrDefault(c => c.Client_Id == cliente.Client_Id);
-
-            if (clienteExistente == null)
-            {
-                TempData["MensajeError"] = "No se Encontro el Cliente Seleccionado";
-                return View(cliente);
-            }
-
-            return RedirectToAction("Sales_Index");
+            var clientes = _context.Cliente.ToList();
+            return View(clientes);
         }
 
+        
 
 
         // GET: EmpleadoVentasController/Details/5

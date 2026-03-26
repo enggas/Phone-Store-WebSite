@@ -7,6 +7,81 @@
 @section Styles {
 	<style>
 
+		:root {
+			--primary-color: #005f6b;
+			--primary-dark: #003d44;
+			--primary-light: #008c9e;
+			--secondary-color: #ff6b6b;
+			--secondary-dark: #ff5252;
+			--light-bg: #f8f9fa;
+			--dark-text: #2d3436;
+			--light-text: #f5f6fa;
+			--gray-text: #636e72;
+			--transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+		}
+
+		.navbar {
+			padding: 1rem 2rem;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+			background-color: var(--primary-color) !important;
+			position: sticky;
+			top: 0;
+			z-index: 1000;
+		}
+
+		.navbar-brand {
+			font-weight: 700;
+			font-size: 1.5rem;
+			display: flex;
+			align-items: center;
+			color: var(--light-text);
+		}
+
+			.navbar-brand img {
+				margin-right: 10px;
+				height: 40px;
+			}
+
+		.nav-link {
+			color: var(--light-text) !important;
+			font-weight: 500;
+			margin: 0 10px;
+			position: relative;
+			padding: 0.5rem 1rem !important;
+		}
+
+			.nav-link::after {
+				content: '';
+				position: absolute;
+				width: 0;
+				height: 2px;
+				bottom: 0;
+				left: 0;
+				background-color: var(--secondary-color);
+				transition: var(--transition);
+			}
+
+			.nav-link:hover::after {
+				width: 100%;
+			}
+
+		.login-btn {
+			background-color: var(--secondary-color);
+			color: var(--light-text) !important;
+			border-radius: 30px;
+			padding: 0.5rem 1.5rem !important;
+			margin-left: 10px;
+		}
+
+			.login-btn:hover {
+				background-color: var(--secondary-dark);
+				transform: translateY(-2px);
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			}
+
+
+
+
 		.container-main {
 			display: flex;
 			min-height: 90vh;
@@ -57,6 +132,16 @@
 	</style>
 }
 
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark w-100">
+	<div class="container-fluid px-4">
+		<a class="navbar-brand fw-bold fs-4" href="#">Phone Store</a>
+
+		<div class="d-flex align-items-center ms-auto">
+			<a class="nav-link text-white" asp-action="LoginEmpleado" asp-controller="LoginEmpleado">Cerrar Sesión</a>
+		</div>
+	</div>
+</nav>
+
 <div class="container-main">
 
 	<div class="sidebar">
@@ -99,7 +184,7 @@
 
 			<div class="text-center">
 
-				<a asp-action="Carrito" class="btn btn-confirm">
+				<a id="btnConfirmar" class="btn btn-confirm">
 					Confirmar Datos del Cliente
 				</a>
 
@@ -129,5 +214,25 @@
 		})
 
 	</script>
+
+	<script>
+
+		const boton = document.getElementById("btnConfirmar")
+
+		boton.addEventListener("click", function(){
+					
+			let clienteId = document.getElementById("clienteSelect").value
+
+			if(clienteId == ""){
+				alert("Seleccione un cliente")
+				return
+			}
+
+			window.location.href = "/EncargadoVentas/Carrito/" + clienteId
+
+		})
+
+	</script>
+
 
 }
