@@ -1,10 +1,9 @@
-﻿@model PhoneStore_Website.Models.ViewModels.Cliente.ClienteIndexViewModel
+﻿@model PhoneStore_Website.Models.ViewModels.VentaIndexViewModel
 @using System.Text.Json
-@using Azure.Core
 @using PhoneStore_Website.Models
 
 @{
-    ViewData["Title"] = "Cliente Index";
+    ViewData["Title"] = "Ventas";
 }
 
 @section Styles {
@@ -20,20 +19,20 @@
         }
 
             .sidebar .nav-link {
-                color: rgba(255, 255, 255, 0.8);
+                color: rgba(255,255,255,0.8);
                 border-left: 3px solid transparent;
                 padding: 10px 15px;
             }
 
                 .sidebar .nav-link:hover {
                     color: white;
-                    background-color: rgba(255, 255, 255, 0.1);
+                    background-color: rgba(255,255,255,0.1);
                     border-left: 3px solid #007bff;
                 }
 
                 .sidebar .nav-link.active {
                     color: white;
-                    background-color: rgba(255, 255, 255, 0.1);
+                    background-color: rgba(255,255,255,0.1);
                     border-left: 3px solid #007bff;
                 }
 
@@ -42,24 +41,22 @@
             color: white;
             padding: 20px 0;
             margin-bottom: 30px;
-            position: relative;
         }
 
         .store-logo {
             height: 80px;
-            margin-bottom: 15px;
         }
 
         .product-card {
             transition: all 0.3s;
             margin-bottom: 20px;
             border: none;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
             .product-card:hover {
                 transform: translateY(-5px);
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             }
 
         .product-img-container {
@@ -67,7 +64,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #f8f9fa;
+            background: #f8f9fa;
             padding: 20px;
         }
 
@@ -75,13 +72,6 @@
             max-height: 100%;
             max-width: 100%;
             object-fit: contain;
-        }
-
-        .badge-oferta {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 0.8rem;
         }
 
         .btn-add-to-cart {
@@ -99,207 +89,146 @@
 
 <div class="store-header text-center">
     <div class="store-title">
-        <img src="@Url.Content("~/images/logo-placeholder.png")" class="store-logo" alt="Logo Phone Store">
+        <img src="~/images/logo-placeholder.png" class="store-logo" />
         <div>
-            <h1>SOMOS PHONE STORE</h1>
-            <p class="mb-0">Los mejores dispositivos al mejor precio</p>
+            <h1>PHONE STORE</h1>
+            <p>Panel de ventas</p>
         </div>
     </div>
 </div>
 
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
-        <div class="col-md-3 col-lg-2 d-md-block sidebar">
-            <div class="position-sticky pt-3">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            <i class="fas fa-home me-2"></i>Inicio
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-action="Carrito" asp-asp-controller="Cliente">
-                            <i class="fas fa-shopping-cart me-2"></i>Carrito
-                            @{
-                                var carritoJson = Context.Session.GetString("Carrito");
-                                var carrito = !string.IsNullOrEmpty(carritoJson) ?
-                                JsonSerializer.Deserialize<List<Carrito>>(carritoJson) : new List<Carrito>();
-                                var itemsEnCarrito = carrito?.Sum(i => i.Cantidad) ?? 0;
-                            }
-                            @if (itemsEnCarrito > 0)
-                            {
-                                <span class="badge bg-danger rounded-pill ms-1">@itemsEnCarrito</span>
-                            }
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-action="DetalleCliente">
-                            <i class="fas fa-user me-2"></i>Mi Cuenta
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Login" asp-action="Logout">
-                            <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
-                        </a>
-                    </li>
-                </ul>
 
-                <hr class="border-light my-4">
+        <!-- SIDEBAR -->
+        <div class="col-md-3 col-lg-2 sidebar">
 
-                <h6 class="sidebar-heading px-3 mb-2">
-                    <i class="fas fa-filter me-2"></i>Filtrar por
-                </h6>
-                <form asp-action="Cliente_Index" method="get" class="px-3">
-                    <div class="mb-3">
-                        <label class="form-label">Marca</label>
-                        <select class="form-select" name="selectedMarcaId">
-                            <option value="">Todas</option>
-                            @if (Model?.Marcas != null)
-                            {
-                                @foreach (var marca in Model.Marcas)
-                                {
-                                    <option value="@marca.Id_Marca">@marca.Marca_Name</option>
-                                }
-                            }
-                        </select>
+            <div class="p-3">
+
+                <h5 class="text-center">Cliente</h5>
+
+                @if (Model.Cliente != null)
+                {
+                    <div class="card bg-dark text-white p-2 mb-3">
+
+                        <p><strong>Nombre:</strong> @Model.Cliente.Client_Fullname</p>
+
+                        <p><strong>Email:</strong> @Model.Cliente.Gmail</p>
+
+                        <p><strong>Telefono:</strong> @Model.Cliente.</p>
+
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Precio</label>
-                        <select class="form-select" name="rangoPrecio">
-                            <option value="">Todos</option>
-                            <option value="0-200">Menos de $200</option>
-                            <option value="200-500">$200 - $500</option>
-                            <option value="500-1000">$500 - $1000</option>
-                            <option value="1000">Más de $1000</option>
-                        </select>
+                }
+                else
+                {
+                    <div class="alert alert-warning">
+                        No hay cliente seleccionado
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="fas fa-filter me-2"></i>Filtrar
-                    </button>
-                </form>
+                }
+
+                <hr class="border-light">
+
+                <a asp-action="CarritoVenta" class="nav-link">
+                    🛒 Ver Carrito
+
+                    @{
+                        var carritoJson = Context.Session.GetString("CarritoVenta");
+
+                        var carrito = !string.IsNullOrEmpty(carritoJson)
+                        ? JsonSerializer.Deserialize<List<Carrito>>(carritoJson)
+                        : new List<Carrito>();
+
+                        var totalItems = carrito?.Sum(x => x.Cantidad) ?? 0;
+                    }
+
+                    @if (totalItems > 0)
+                    {
+                        <span class="badge bg-danger">@totalItems</span>
+                    }
+
+                </a>
+
+                <hr class="border-light">
+
+                <a asp-action="SalesIndex" class="nav-link">
+                    ← Cambiar Cliente
+                </a>
+
             </div>
         </div>
 
-        <!-- Contenido principal -->
-        <main class="col-md-9 col-lg-10 px-md-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="mb-0">Nuestros Productos</h2>
-                <div class="input-group" style="width: 300px;">
 
-                    <div class="input-group" style="width: 300px;">
-                        <form asp-action="Cliente_Index" method="get" class="search-container">
-                            <input type="text" name="search" class="search-bar" placeholder="Buscar productos..." value="@Context.Request.Query["search"]" />
-                            <button type="submit"><i class="fas fa-search search-icon"></i></button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+        <!-- CONTENIDO -->
+        <main class="col-md-9 col-lg-10 px-md-4">
+
+            <h2 class="mb-4">Productos</h2>
 
             <div class="row">
+
                 @if (Model.Productos != null && Model.Productos.Any())
                 {
                     @foreach (var producto in Model.Productos)
                     {
-                        <div class="col-md-4 mb-4">
+
+                        <div class="col-md-4">
+
                             <div class="card product-card h-100">
-                                @if (producto.Sale_Price < producto.Purchase_Price)
-                                {
-                                    <span class="badge bg-danger badge-oferta">OFERTA</span>
-                                }
+
                                 <div class="product-img-container">
-                                    <img src="@Url.Content($"~/images/{(string.IsNullOrEmpty(producto.Imagen) ? "image-placeholder.png" : producto.Imagen)}")"
-                                         class="product-img"
-                                         alt="@producto.Prod_Name"
-                                         onerror="this.src='@Url.Content("~/images/image-placeholder.png")'" />
+
+                                    <img src="~/images/@(string.IsNullOrEmpty(producto.Imagen) ? "image-placeholder.png" : producto.Imagen)"
+                                         class="product-img" />
 
                                 </div>
+
                                 <div class="card-body">
-                                    <h5 class="card-title" data-name="@producto.Prod_Name.ToLower()">@producto.Prod_Name</h5>
-                                    <p class="card-text text-muted">@producto.Prod_Description</p>
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                        @if (producto.Sale_Price < producto.Purchase_Price)
-                                        {
-                                            <div>
-                                                <span class="text-decoration-line-through text-muted">@producto.Purchase_Price.ToString("C")</span>
-                                                <span class="text-danger fw-bold ms-2">@producto.Sale_Price.ToString("C")</span>
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <span class="fw-bold">@producto.Sale_Price.ToString("C")</span>
-                                        }
+
+                                    <h5>@producto.Prod_Name</h5>
+
+                                    <p class="text-muted">@producto.Prod_Description</p>
+
+                                    <div class="mb-2">
+                                        <strong>@producto.Sale_Price.ToString("C")</strong>
                                     </div>
-                                    <form asp-action="AgregarAlCarrito" method="post">
+
+                                    <form asp-action="AgregarProductoVenta" method="post">
+
                                         <input type="hidden" name="productoId" value="@producto.Prod_Id" />
+
                                         <div class="input-group">
-                                            <input type="number" name="cantidad" value="1" min="1"
-                                                   class="form-control quantity-input">
-                                            <button type="submit" class="btn btn-primary btn-add-to-cart">
-                                                <i class="fas fa-cart-plus me-2"></i>Agregar
+
+                                            <input type="number"
+                                                   name="cantidad"
+                                                   value="1"
+                                                   min="1"
+                                                   class="form-control" />
+
+                                            <button class="btn btn-primary btn-add-to-cart">
+                                                Agregar
                                             </button>
+
                                         </div>
+
                                     </form>
+
                                 </div>
+
                             </div>
+
                         </div>
+
                     }
                 }
                 else
                 {
-                    <div class="col-12">
-                        <div class="alert alert-info text-center">
-                            <i class="fas fa-info-circle me-2"></i> No se encontraron productos con los filtros seleccionados.
-                        </div>
+                    <div class="alert alert-info">
+                        No hay productos disponibles
                     </div>
                 }
+
             </div>
+
         </main>
+
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        // Validación de cantidad antes de enviar el formulario
-        document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', function(e) {
-                const input = this.querySelector('input[name="cantidad"]');
-                const value = parseInt(input.value);
-
-                if (isNaN(value) || value < 1) {
-                    e.preventDefault();
-                    alert('La cantidad debe ser al menos 1');
-                    input.focus();
-                }
-            });
-        });
-
-        // Activar elementos activos en el sidebar
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentUrl = window.location.pathname;
-            const navLinks = document.querySelectorAll('.sidebar .nav-link');
-
-            navLinks.forEach(link => {
-                if (link.getAttribute('href') === currentUrl) {
-                    link.classList.add('active');
-                }
-            });
-        });
-
-        document.getElementById("searchInput").addEventListener("input", function () {
-            let input = this.value.toLowerCase();
-            let productos = document.querySelectorAll(".product-card");
-
-            productos.forEach(function (card) {
-                let nombre = card.getAttribute("data-name");
-                if (nombre.includes(input)) {
-                    card.style.display = "block";
-                } else {
-                    card.style.display = "none";
-                }
-            });
-        });
-
-    </script>
-}
-
