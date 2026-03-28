@@ -156,40 +156,42 @@
 
 		<div class="form-box">
 
-			<select id="clienteSelect" class="form-control mb-4">
+			<form asp-action="SeleccionProducto" asp-controller="EncargadoVentas" method="get">
 
-				<option value="">Seleccionar Cliente</option>
+				<select id="clienteSelect" class="form-control mb-4">
 
-				@foreach (var c in Model)
-				{
-					<option value="@c.Client_Id"
-							data-nombre="@c.Client_Fullname"
-							data-cedula="@c.Cedula"
-							data-telefono="@c.Telephone"
-							data-gmail="@c.Gmail">
+					<option value="">Seleccionar Cliente</option>
 
-						@c.Client_Fullname
+					@foreach (var c in Model)
+					{
+						<option value="@c.Client_Id"
+								data-nombre="@c.Client_Fullname"
+								data-cedula="@c.Cedula"
+								data-telefono="@c.Telephone"
+								data-gmail="@c.Gmail">
 
-					</option>
-				}
+							@c.Client_Fullname
 
-			</select>
+						</option>
+					}
 
+				</select>
 
-			<div class="field" id="nombre">Nombre Cliente</div>
-			<div class="field" id="cedula">Cedula Cliente</div>
-			<div class="field" id="telefono">Telefono Cliente</div>
-			<div class="field" id="gmail">Gmail Cliente</div>
+				<input type="hidden" id="clienteId" name="clienteId" />
 
+				<div class="field" id="nombre">Nombre Cliente</div>
+				<div class="field" id="cedula">Cedula Cliente</div>
+				<div class="field" id="telefono">Telefono Cliente</div>
+				<div class="field" id="gmail">Gmail Cliente</div>
 
-			<div class="text-center">
+				<div class="text-center">
+					<button class="btn btn-confirm">
+						Confirmar Datos del Cliente
+					</button>
+				</div>
 
-				<a id="btnConfirmar" class="btn btn-confirm">
-					Confirmar Datos del Cliente
-				</a>
-
-			</div>
-
+			</form>
+			
 		</div>
 
 	</div>
@@ -201,38 +203,21 @@
 	<script>
 
 		const select = document.getElementById("clienteSelect")
+		const clienteIdInput = document.getElementById("clienteId")
 
 		select.addEventListener("change",function(){
 
-		let option = this.options[this.selectedIndex]
+			let option = this.options[this.selectedIndex]
 
-		document.getElementById("nombre").innerText = option.dataset.nombre
-		document.getElementById("cedula").innerText = option.dataset.cedula
-		document.getElementById("telefono").innerText = option.dataset.telefono
-		document.getElementById("gmail").innerText = option.dataset.gmail
+			document.getElementById("nombre").innerText = option.dataset.nombre
+			document.getElementById("cedula").innerText = option.dataset.cedula
+			document.getElementById("telefono").innerText = option.dataset.telefono
+			document.getElementById("gmail").innerText = option.dataset.gmail
 
-		})
-
-	</script>
-
-	<script>
-
-		const boton = document.getElementById("btnConfirmar")
-
-		boton.addEventListener("click", function(){
-					
-			let clienteId = document.getElementById("clienteSelect").value
-
-			if(clienteId == ""){
-				alert("Seleccione un cliente")
-				return
-			}
-
-			window.location.href = "/EncargadoVentas/Carrito_VentaEmployee"
+			clienteIdInput.value = option.value
 
 		})
 
 	</script>
-
 
 }
